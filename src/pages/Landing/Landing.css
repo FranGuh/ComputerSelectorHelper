@@ -1,0 +1,21 @@
+.Landing{
+    display: flex;
+    width: auto;
+    height: auto;
+    border-radius: 0.5em;
+    background: #F5F8FA;
+    background: linear-gradient(13deg, rgba(245, 248, 250, 1) 0%, rgb(202, 233, 255) 100%);
+    justify-content: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border: 3px solid gray;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    flex-direction: column;
+}
+
+button{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
