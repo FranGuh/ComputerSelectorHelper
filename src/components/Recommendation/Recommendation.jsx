@@ -3,7 +3,7 @@ import questions from '../../constants/questions'
 import convertToSpecs from '../../utils/convertToSpecs'
 import './Recommendation.css'
 import LaptopCard from '../LaptopCard/LaptopCard'
-import laptopModels from '../../utils/laptopModels'
+
 import {
     FaMicrochip,       // Procesador
     FaMemory,          // RAM
@@ -198,13 +198,34 @@ function Recommendation() {
                     </>
                 )}
 
-                {result.laptopClass && (
-                    <>
-                        <h4>🎯 Modelo sugerido:</h4>
-                        <p className='Modelo__sugerido'>{result.laptopClass}</p>
-                        <LaptopCard model={laptopModels.find(m => m.name === result.laptopClass)} />
-                    </>
+                {result.rationale.length > 0 && (
+                <>
+                    <h4 style={{ textAlign: 'center', marginBottom: '10px' }}>
+                    🧠 Justificación técnica:
+                    </h4>
+                    <div className="RationaleGrid">
+                    {result.rationale.map((reason, index) => (
+                        <div key={index} className="RationaleCard">
+                        <FaCheckCircle className="RationaleIcon" />
+                        <p className="RationaleText">{reason}</p>
+                        </div>
+                    ))}
+                    </div>
+                </>
                 )}
+
+
+                {result.laptopClass && Array.isArray(result.laptopClass) && (
+                <>
+                    <h4>🎯 Modelos sugeridos (Puede haber alguno o no es solo referencia):</h4>
+                    <div className="SuggestedModelsGrid">
+                    {result.laptopClass.map((model, index) => (
+                        <LaptopCard key={model.id || index} model={model} />
+                    ))}
+                    </div>
+                </>
+                )}
+
                 <div className='reintentar'>
                     <p>¿Querés cambiar tus respuestas o probar otra combinación?</p>
                     <button button onClick={handleReset} className='btn-grad'>Reiniciar cuestionario</button>

@@ -8,8 +8,12 @@ function App() {
     <BrowserRouter>
       <h1>Computer Selector <span className='title__alter'>Helper</span></h1>
       <AppRoutes />
-          <Analytics/>
-      <h5>Coded by @Fran</h5>
+      <Analytics />
+      <a href="https://redirect-link-flame.vercel.app/" target="_blank" rel="noopener noreferrer">
+        <h5>Coded by @Fran</h5>
+      </a>
+
+
     </BrowserRouter>
 
   )

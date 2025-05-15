@@ -1,5 +1,20 @@
 import matchLaptopClass from './matchLaptopClass'
 
+const forceAppleSpecs = (specs, scores) => {
+  specs.processor = 'Apple M1 / M2 / M3'
+  specs.gpu = 'Apple Silicon GPU (M1/M2/M3)'
+  scores.graphics = 0
+}
+
+const forceChromeSpecs = (specs) => {
+  specs.processor = 'Intel Celeron / MediaTek'
+  specs.ram = '4 GB o 8 GB'
+  specs.gpu = 'Gráficos integrados básicos'
+  specs.storage = '64 GB eMMC o 128 GB SSD'
+  specs.rationale.push('ChromeOS está pensado para tareas básicas con hardware modesto.')
+}
+
+
 const convertToSpecs = (answers) => {
   const specs = {
     processor: '',
@@ -30,6 +45,15 @@ const convertToSpecs = (answers) => {
     ? ['basics', 'entertainment', 'gaming', 'work_school', 'creating', 'family']
     : answers.mainUse || []
 
+  if (answers.system === 'mac') {
+    forceAppleSpecs(specs, scores)
+  }
+
+  if (answers.system === 'chrome') {
+    forceChromeSpecs(specs)
+  }
+
+
   // ==== 1. Scoring según uso ====
   if (uses.includes('gaming')) {
     scores.performance += 3.5
@@ -52,6 +76,12 @@ const convertToSpecs = (answers) => {
     specs.rationale.push('Trabajo exigente necesita buena CPU y multitarea.')
   }
 
+  if (uses.includes('family')) {
+    scores.multitasking += 1
+    specs.rationale.push('Uso compartido en casa requiere buena capacidad multitarea.')
+  }
+
+
   if (answers.webBrowsing === 'heavy') {
     scores.multitasking += 1.5
     specs.rationale.push('Muchas pestañas requieren buena RAM.')
@@ -67,6 +97,15 @@ const convertToSpecs = (answers) => {
     specs.rationale.push('Requiere pantalla táctil.')
   }
 
+  if (answers.importance === 'security') {
+    specs.rationale.push('Prioritás seguridad. Buscamos modelos con lector de huellas o reconocimiento facial si es posible.')
+  }
+
+  if (answers.importance === 'portability') {
+    specs.rationale.push('Buscás un equipo liviano. Se prioriza que pese menos de 1.5 kg y tenga una pantalla de 14" o menor.')
+  }
+
+
   if (answers.battery === 'yes') {
     scores.battery += 3
     specs.rationale.push('Priorizás batería de larga duración.')
@@ -78,17 +117,45 @@ const convertToSpecs = (answers) => {
       scores.performance >= 4 ? 'Intel i5 / Ryzen 5' :
         'Intel i3 / Ryzen 3 o Celeron'
 
-  specs.ram =
-    scores.multitasking >= 4 ? '16 GB' :
-      scores.multitasking >= 2 ? '12 GB' :
-        '8 GB'
+  if (answers.system === 'mac') {
+    specs.ram = scores.multitasking >= 4 ? '16 GB' : '8 GB'
+  } else {
+    specs.ram =
+      scores.multitasking >= 4 ? '16 GB' :
+        scores.multitasking >= 2 ? '12 GB' :
+          '8 GB'
+  }
+
+  if (answers.system === 'mac' && uses.includes('gaming')) {
+    specs.warnings.push('macOS no es compatible con la mayoría de juegos exigentes. Considerá Windows si es prioridad.')
+  }
+
+  if (answers.system === 'chrome' && (
+    answers.photoVideo === 'pro' ||
+    answers.workload === 'heavy' ||
+    uses.includes('gaming'))
+  ) {
+    specs.warnings.push('ChromeOS no es ideal para tareas pesadas o software profesional. Considerá Windows o macOS.')
+  }
+
+
 
   specs.storage = scores.storage >= 2 ? '512 GB SSD' : '256 GB SSD'
+
+  if (specs.storage === '256 GB SSD' && uses.includes('creating')) {
+    specs.warnings.push('256 GB puede llenarse rápido con archivos de diseño o video. Considerá 512 GB o más.')
+  }
+
 
   specs.gpu =
     scores.graphics >= 4 ? 'NVIDIA RTX 3050 o superior' :
       scores.graphics >= 2 ? 'Intel Iris Xe / Radeon Vega' :
         'Gráficos integrados básicos'
+  // Override para macOS: siempre Apple Silicon
+  if (answers.system === 'mac') {
+    specs.gpu = 'Apple integrada (M1/M2/M3) o Intel HD (modelos antiguos)'
+  }
+
 
   specs.portability = scores.portability >= 3 ? 'Alta (menos de 1.5kg, 14")' : 'Media o baja'
   specs.battery = scores.battery >= 3 ? 'Alta (8h o más)' : 'Media (4-7h)'
@@ -108,18 +175,13 @@ const convertToSpecs = (answers) => {
       specs.os = 'Windows 11'
   }
 
-  if (specs.os === 'ChromeOS') {
-    specs.processor = 'Intel Celeron / MediaTek'
-    specs.ram = '4 GB o 8 GB'
-    specs.gpu = 'Gráficos integrados básicos'
-    specs.storage = '64 GB eMMC o 128 GB SSD'
-    specs.rationale.push('ChromeOS está pensado para tareas básicas con hardware modesto.')
-  }
-
   // ==== 4. Validaciones cruzadas ====
   if (specs.os === 'macOS') {
     if (uses.includes('gaming')) {
       specs.warnings.push('macOS no es ideal para juegos exigentes ni es compatible con la mayoría de títulos AAA. Recomendamos Windows.')
+    }
+    if (uses.includes('gaming') && answers.system === 'chrome') {
+      specs.warnings.unshift('⚠️ Elegiste "juegos exigentes" pero seleccionaste ChromeOS, que no soporta juegos avanzados. Recomendamos Windows si querés jugar títulos como GTA, FIFA o similares.')
     }
     if (specs.gpu.includes('RTX')) {
       specs.warnings.push('Mac no usa GPUs dedicadas tipo RTX, sus chips integrados (M1/M2/M3) tienen gráficas propias.')
@@ -132,18 +194,18 @@ const convertToSpecs = (answers) => {
   }
 
   if (
-  specs.os === 'macOS' &&
-  answers.budget === 'low' &&
-  (
-    uses.includes('gaming') ||
-    uses.includes('creating') ||
-    uses.includes('work_school') ||
-    answers.workload === 'heavy' ||
-    answers.photoVideo === 'pro'
-  )
-) {
-  specs.warnings.unshift('⚠️ Querés hacer cosas muy exigentes en una Mac, pero con menos de $5,000 MXN. No es viable. Recomendamos subir el presupuesto o considerar una laptop con Windows.')
-}
+    specs.os === 'macOS' &&
+    answers.budget === 'low' &&
+    (
+      uses.includes('gaming') ||
+      uses.includes('creating') ||
+      uses.includes('work_school') ||
+      answers.workload === 'heavy' ||
+      answers.photoVideo === 'pro'
+    )
+  ) {
+    specs.warnings.unshift('⚠️ Querés hacer cosas muy exigentes en una Mac, pero con menos de $5,000 MXN. No es viable. Recomendamos subir el presupuesto o considerar una laptop con Windows.')
+  }
 
 
   if (specs.os === 'ChromeOS') {
@@ -195,34 +257,87 @@ const convertToSpecs = (answers) => {
     }
   }
 
-  const bestModel = matchLaptopClass(specs)
-  specs.laptopClass = bestModel.name || bestModel
+  const bestModels = matchLaptopClass(specs)
+  specs.laptopClass = bestModels // 👈 ya es un array de modelos
+
+
+  const osFilter = specs.os.toLowerCase()
+  specs.laptopClass = bestModels.filter(m => {
+      const name = m.name.toLowerCase()
+      if (osFilter.includes('chrome') && !name.includes('chromebook')) return false
+      if (osFilter.includes('macos') && !name.includes('macbook')) return false
+      if (osFilter.includes('windows') && name.includes('macbook')) return false
+      return true
+    }) || []
+
+if (specs.laptopClass.length === 0) {
+  let fallbackMsg = '⚠️ No encontramos laptops con ';
+
+  if (specs.os === 'ChromeOS') fallbackMsg += 'ChromeOS ';
+  else if (specs.os === 'macOS') fallbackMsg += 'macOS ';
+  else fallbackMsg += 'el sistema operativo deseado ';
+
+  fallbackMsg += 'para tus necesidades. Mostramos opciones similares con Windows.';
+
+  specs.warnings.push(fallbackMsg);
+  specs.laptopClass = bestModels;
+}
+
 
   // Verificación si el modelo tiene menos RAM que la recomendada
   if (
-    bestModel &&
-    bestModel.name !== 'Clase genérica' &&
+    Array.isArray(bestModels) &&
     specs.ram === '12 GB' &&
-    bestModel.specs.toLowerCase().includes('8 gb')
+    bestModels.some(m => m.specs.toLowerCase().includes('8 gb'))
   ) {
-    specs.warnings.push('El modelo sugerido tiene 8 GB de RAM, que puede ser justo si hacés mucha multitarea.')
+    specs.warnings.push('Uno de los modelos sugeridos tiene 8 GB de RAM, que puede ser justo si hacés mucha multitarea.')
   }
 
   // ==== 7. Advertencia crítica por combinación inviable ====
-if (
-  specs.os === 'ChromeOS' &&
-  answers.budget === 'low' &&
-  (
-    uses.includes('gaming') ||
-    uses.includes('creating') ||
-    uses.includes('work_school') ||
-    answers.workload === 'heavy' ||
-    answers.photoVideo === 'pro'
-  )
-) {
-  specs.warnings.unshift('⚠️ Estás solicitando tareas exigentes (edición, juegos, multitarea) en un sistema muy limitado (ChromeOS con presupuesto bajo). No es viable cumplir esos requerimientos con esta combinación. Recomendamos considerar Windows con mayor inversión.')
-}
+  if (
+    specs.os === 'ChromeOS' &&
+    answers.budget === 'low' &&
+    (
+      uses.includes('gaming') ||
+      uses.includes('creating') ||
+      uses.includes('work_school') ||
+      answers.workload === 'heavy' ||
+      answers.photoVideo === 'pro'
+    )
+  ) {
+    specs.warnings.unshift('⚠️ Estás solicitando tareas exigentes (edición, juegos, multitarea) en un sistema muy limitado (ChromeOS con presupuesto bajo). No es viable cumplir esos requerimientos con esta combinación. Recomendamos considerar Windows con mayor inversión.')
+  }
 
+
+  if (answers.budget === 'low' && (
+    scores.performance >= 4 ||
+    scores.graphics >= 2 ||
+    scores.multitasking >= 4 ||
+    uses.includes('creating')
+  )) {
+    specs.warnings.push('⚠️ Tu presupuesto bajo puede limitar el rendimiento que necesitás. Considerá ajustar prioridades o aumentar presupuesto.')
+  }
+
+  // === VALIDACIÓN DE USO CONTRADICTORIO ===
+  const isBasicUseOnly = Array.isArray(answers.mainUse)
+    ? answers.mainUse.length === 1 && answers.mainUse[0] === 'entertainment'
+    : answers.mainUse === 'entertainment'
+
+  const isDemandingUser =
+    answers.workload === 'heavy' ||
+    answers.photoVideo === 'pro' ||
+    scores.performance >= 4 ||
+    scores.multitasking >= 4 ||
+    scores.graphics >= 2.5
+
+  if (isBasicUseOnly && isDemandingUser) {
+    specs.warnings.unshift('⚠️ Elegiste un uso simple como "ver videos", pero tus respuestas indican tareas exigentes como edición o multitarea pesada. Considerá ajustar tu selección inicial para mejorar la recomendación.')
+  }
+
+  specs.flags = {
+    prioritizePortability: answers.importance === 'portability',
+    prioritizeSecurity: answers.importance === 'security'
+  }
 
 
 
