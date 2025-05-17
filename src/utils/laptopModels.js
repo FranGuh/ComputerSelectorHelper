@@ -11,7 +11,7 @@ const laptopModels = [
     price: "$4,199 MXN",
     portability: "Alta",
     image:
-      "https://http2.mlstatic.com/D_NQ_NP_998635-MLU72707430546_112023-O.webp",
+      "https://www.notebookcheck.net/fileadmin/Notebooks/HP/Stream_14-ax002ng/2.jpg",
     link: buildGoogleLink("HP Stream 14"),
   },
   {
@@ -23,7 +23,7 @@ const laptopModels = [
     price: "$5,999 MXN",
     portability: "Media",
     image:
-      "https://http2.mlstatic.com/D_NQ_NP_892980-MLU72709381313_112023-O.webp",
+      "https://laptoping.com/specs/wp-content/uploads/2024/06/Acer-Aspire-Go-15-Slim-AG15-31P-3947.jpg",
     link: buildGoogleLink("acer-aspire-go"),
   },
   {
@@ -35,7 +35,7 @@ const laptopModels = [
     price: "$14,999 MXN",
     portability: "Media",
     image:
-      "https://http2.mlstatic.com/D_NQ_NP_848177-MLU72623477670_112023-O.webp",
+      "https://m.media-amazon.com/images/I/71XwPLUaKsL._AC_SL1500_.jpg",
     link: buildGoogleLink("hp-victus-rtx3050"),
   },
   {
@@ -47,7 +47,7 @@ const laptopModels = [
     price: "$13,999 MXN",
     portability: "Alta",
     image:
-      "https://http2.mlstatic.com/D_NQ_NP_927379-MLU72708791150_112023-O.webp",
+      "https://th.bing.com/th/id/OIP.Q4muQjrfyxVhOB5PMwAF6gHaE8?cb=iwp2&rs=1&pid=ImgDetMainhttps://thangpro.vn/uploads/source/laptop/macbook/mac-air-m1/img-7707.jpg",
     link: buildGoogleLink("macbook-air-m1"),
   },
   {
@@ -59,7 +59,7 @@ const laptopModels = [
     price: "$16,339 MXN",
     portability: "Media",
     image:
-      "https://http2.mlstatic.com/D_NQ_NP_846917-MLU72696975214_112023-O.webp",
+      "https://laptopmedia.com/wp-content/uploads/2021/01/2-40.jpg",
     link: buildGoogleLink("asus-tuf-a15"),
   },
   {
@@ -71,7 +71,7 @@ const laptopModels = [
     price: "$3,499 MXN",
     portability: "Alta",
     image:
-      "https://http2.mlstatic.com/D_NQ_NP_758541-MLA46348158591_062021-O.webp",
+      "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6447/6447138_sd.jpg",
     link: buildGoogleLink("lenovo-chromebook-3"),
   },
   {
@@ -83,7 +83,7 @@ const laptopModels = [
     price: "$23,999 MXN",
     portability: "Alta",
     image:
-      "https://http2.mlstatic.com/D_NQ_NP_690601-MLA54392916913_032023-O.webp",
+      "https://cdn.shopify.com/s/files/1/1706/9177/products/macbook-air-m2-midnight-custom-mac-bd_b82010cb-9405-4654-a165-9576a249e4e0.jpg",
     link: buildGoogleLink("macbook-air-m2"),
   },
 
@@ -96,7 +96,7 @@ const laptopModels = [
     price: "$38,999 MXN",
     portability: "Baja",
     image:
-      "https://http2.mlstatic.com/D_NQ_NP_697680-MLA71353724425_082023-O.webp",
+      "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6534/6534466ld.jpg",
     link: buildGoogleLink("lenovo-gamer-rtx4070"),
   },
   {
@@ -108,7 +108,7 @@ const laptopModels = [
     price: "$17,499 MXN",
     portability: "Media",
     image:
-      "https://http2.mlstatic.com/D_NQ_NP_878174-MLA48687548976_122021-O.webp",
+      "https://i0.wp.com/phukienmaytinh.com.vn/wp-content/uploads/2020/02/MSI-GF63-3.jpg",
     link: buildGoogleLink("msi-gamer-rtx2060"),
   },
   {
@@ -119,7 +119,7 @@ const laptopModels = [
     gpu: "Intel Iris Xe",
     price: "$14,399 MXN",
     portability: "Media",
-    image: "https://http2.mlstatic.com/D_NQ_NP_XXXXXX-MLA00000000000_000000-O.webp",
+    image: "https://www.presse-citron.net/app/uploads/2021/05/DSC01401_DxO_PC.jpg",
     link: buildGoogleLink("Huawei MateBook D16"),
   },
   {
@@ -130,7 +130,7 @@ const laptopModels = [
     gpu: "Intel Iris Xe",
     price: "$15,722 MXN",
     portability: "Media",
-    image: "https://http2.mlstatic.com/D_NQ_NP_XXXXXX-MLA00000000000_000000-O.webp",
+    image: "https://m.media-amazon.com/images/I/613hm2YD6mL._AC_.jpg",
     link: buildGoogleLink("HP Pavilion i7-1355U"),
   },
   {
@@ -141,7 +141,7 @@ const laptopModels = [
     gpu: "RTX 4060",
     price: "$33,999 MXN",
     portability: "Media",
-    image: "https://http2.mlstatic.com/D_NQ_NP_XXXXXX-MLA00000000000_000000-O.webp",
+    image: "https://storage-asset.msi.com/global/picture/image/feature/nb/2023_RPLS/sword16-hx-b14v/msi-sword16-display-new.png",
     link: buildGoogleLink("MSI Sword 16 HX"),
   },
   {
@@ -152,7 +152,7 @@ const laptopModels = [
     gpu: "Intel integrada",
     price: "$4,800 MXN",
     portability: "Alta",
-    image: "https://http2.mlstatic.com/D_NQ_NP_XXXXXX-MLA00000000000_000000-O.webp",
+    image: "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6425/6425056_rd.jpg",
     link: buildGoogleLink("Laptop 14 Intel 256gb"),
   },
     {
@@ -163,7 +163,7 @@ const laptopModels = [
     gpu: "Apple Silicon",
     price: "$30,950 MXN",
     portability: "Alta",
-    image: "", // Puedes colocar una URL de imagen real aquí
+    image: "https://ipadizate.com/hero/2023/01/MacBook-Air-M2-Chip-Purple-Feature.jpg", 
     link: buildGoogleLink("MacBook Air M4 512 GB")
   },
   {
@@ -174,7 +174,7 @@ const laptopModels = [
     gpu: "RTX 4060",
     price: "$20,642 MXN",
     portability: "Media",
-    image: "",
+    image: "https://www.notebookcheck.com/fileadmin/_processed_/9/2/csm_Acer_Nitro_5_RTX_4060_guenstigstes_gaming_notebook_deal_db9eae21d8.jpg",
     link: buildGoogleLink("Acer Nitro 5 RTX 4060")
   },
   {
@@ -185,7 +185,7 @@ const laptopModels = [
     gpu: "Intel Iris Xe",
     price: "$9,797 MXN",
     portability: "Media",
-    image: "",
+    image: "https://lidernotebooks.com.ar/wp-content/uploads/2024/10/HP-15-fd0999NR-Core-i5_0004_Capa-7.jpg",
     link: buildGoogleLink("HP 15-fd0999nr")
   },
   {
@@ -196,7 +196,7 @@ const laptopModels = [
     gpu: "GTX 1650",
     price: "$11,999 MXN",
     portability: "Media",
-    image: "",
+    image: "https://laptop360.net/wp-content/uploads/2022/09/MSI-Gaming-GF63-Thin-11UC-3-1536x1152.jpg",
     link: buildGoogleLink("MSI GF63 GTX 1650")
   },
   {
@@ -207,7 +207,7 @@ const laptopModels = [
     gpu: "Intel integrada",
     price: "$18,999 MXN",
     portability: "Alta",
-    image: "",
+    image: "https://cdn.mos.cms.futurecdn.net/4C7JXvghGrpY52MtBiN2cB.jpg",
     link: buildGoogleLink("Lenovo Yoga Slim 7")
   },
   {
@@ -218,7 +218,7 @@ const laptopModels = [
   gpu: "Intel UHD Graphics",
   price: "$14,553 MXN",
   portability: "Media",
-  image: "https://http2.mlstatic.com/D_NQ_NP_2X_IMAGE_ID.webp", // reemplaza con el URL real si tienes la imagen
+  image: "https://global.machenike.com/cdn/shop/files/11_818b6222-59ce-4193-a68b-bbc8e043b8ef.jpg",
   link: buildGoogleLink("Laptop Machcreator 15N i7"),
 },
 {
@@ -229,7 +229,7 @@ const laptopModels = [
   gpu: "Nvidia GeForce RTX 4060",
   price: "$34,954 MXN",
   portability: "Baja",
-  image: "https://http2.mlstatic.com/D_NQ_NP_2X_IMAGE_ID.webp", // Reemplaza con el link correcto
+  image: "https://http2.mlstatic.com/D_NQ_NP_875287-MLU73599603547_122023-O.webp", 
   link: buildGoogleLink("Machenike L16 Pro RTX 4060"),
 },
 {
@@ -240,7 +240,7 @@ const laptopModels = [
   gpu: "Intel Graphics integrada",
   price: "$22,999 MXN",
   portability: "Alta",
-  image: "https://http2.mlstatic.com/D_NQ_NP_2X_IMAGE_ID.webp", // Reemplaza con URL real
+  image: "https://media-ik.croma.com/prod/https://media.croma.com/image/upload/v1708516453/Croma%20Assets/Computers%20Peripherals/Laptop/Images/305055_4_bsd9ja.png",
   link: buildGoogleLink("Samsung Galaxy Book4 360"),
 },
 {
@@ -251,7 +251,7 @@ const laptopModels = [
   gpu: "NVIDIA GeForce MX230 (2 GB GDDR5)",
   price: "$6,935 MXN",
   portability: "Media",
-  image: "https://http2.mlstatic.com/D_NQ_NP_2X_IMAGE_ID.webp", // Reemplaza con URL real si tienes una
+  image: "https://m.media-amazon.com/images/I/71gXrO3lsqL._AC_.jpg", 
   link: buildGoogleLink("Topgro N5 i3 MX230"),
 },
 {
@@ -262,7 +262,7 @@ const laptopModels = [
   gpu: "Intel UHD Graphics 600",
   price: "$3,695 MXN",
   portability: "Alta",
-  image: "https://http2.mlstatic.com/D_NQ_NP_2X_IMAGE_ID.webp", // Reemplaza con la URL real si tienes una
+  image: "https://static.wixstatic.com/media/c8ef56_df2decbc5ac442c28c399e2c9a2ee5e2~mv2.webp", 
   link: buildGoogleLink("VSAP Intel Celeron N4020"),
 },
 
