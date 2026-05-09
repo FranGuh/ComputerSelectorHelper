@@ -1,5 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { FaExclamationTriangle, FaLaptop, FaCheckCircle, FaArrowRight } from 'react-icons/fa'
 import './Landing.css'
 
@@ -11,9 +12,23 @@ const Landing = () => {
   }
 
   return (
-    <div className="Landing">
-      <h2>¿No sabés qué laptop elegir?</h2>
-      <img className='Landing__img' src="/help.svg" alt="" />
+    <>
+      <Helmet>
+        <title>Computer Selector Helper — Encontrá tu laptop ideal</title>
+        <meta name="description" content="Respondé unas preguntas y recibí una recomendación personalizada de laptop según tu presupuesto y necesidades reales." />
+        <meta name="keywords" content="laptop, computadora, recomendación, comprar laptop, mejor laptop, asesor laptop" />
+        <meta property="og:title" content="Computer Selector Helper — Encontrá tu laptop ideal" />
+        <meta property="og:description" content="Respondé unas preguntas y recibí una recomendación personalizada de laptop según tu presupuesto y necesidades reales." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://computerselectorhelper.vercel.app/" />
+        <meta property="og:image" content="https://computerselectorhelper.vercel.app/help.svg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Computer Selector Helper — Encontrá tu laptop ideal" />
+        <meta name="twitter:description" content="Respondé unas preguntas y recibí una recomendación personalizada de laptop." />
+      </Helmet>
+      <div className="Landing">
+        <h2>¿No sabés qué laptop elegir?</h2>
+        <img className='Landing__img' src="/help.svg" alt="Asistente de ayuda para elegir laptop" />
       <p className="landing-subtitle">
         Respondé unas preguntas y recibí una recomendación personalizada según tu presupuesto y tus necesidades reales.
       </p>
@@ -44,6 +59,7 @@ const Landing = () => {
         </button>
       </div>
     </div>
+    </>
   )
 }
 

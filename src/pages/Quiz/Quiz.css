@@ -14,8 +14,9 @@
     flex-direction: column;
 }
 
-button{
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 10px;
+.Quiz button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-sm);
 }

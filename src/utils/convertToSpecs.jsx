@@ -1,9 +1,22 @@
-import matchLaptopClass from './matchLaptopClass'
+/*
+ * CHANGES (2026-05-09 — Inference Engine P0 Fixes):
+ * T1.1: Removed duplicate macOS+gaming warning (was at old line 129-131)
+ * T1.2: Moved dead ChromeOS warning from inside macOS block to ChromeOS block
+ * T1.3: Added prioritizeGaming and prioritizeScreenQuality flags
+ * T1.4: Fixed RAM comparison false positive — skip warning on macOS
+ * T1.5/T1.14: Fixed bestModels filter — empty result stays empty, no fallback to unfiltered
+ * T1.6: forceAppleSpecs now sets scores.graphics = 1 (Apple Silicon has decent iGPU)
+ * T1.7: Normalizes uses early; when mainUse === 'full_use' expands to full array
+ * T1.9: Added gamesType scoring (complex/simple)
+ * T1.10: Added photoVideo === 'basic' scoring
+ * T1.15: Added generic spec-profile fallback when laptopClass is empty
+ */
+import matchLaptopClass, { matchLaptopClassRelaxed } from './matchLaptopClass'
 
 const forceAppleSpecs = (specs, scores) => {
   specs.processor = 'Apple M1 / M2 / M3'
   specs.gpu = 'Apple Silicon GPU (M1/M2/M3)'
-  scores.graphics = 0
+  scores.graphics = 1
 }
 
 const forceChromeSpecs = (specs) => {
@@ -41,9 +54,11 @@ const convertToSpecs = (answers) => {
     storage: 0
   }
 
+  // T1.7: Normalize uses early — expand 'full_use' to full array
   const uses = answers.mainUse === 'full_use'
     ? ['basics', 'entertainment', 'gaming', 'work_school', 'creating', 'family']
-    : answers.mainUse || []
+    : (Array.isArray(answers.mainUse) ? answers.mainUse : [])
+
 
   if (answers.system === 'mac') {
     forceAppleSpecs(specs, scores)
@@ -60,6 +75,16 @@ const convertToSpecs = (answers) => {
     scores.graphics += 4.5
     scores.storage += 1
     specs.rationale.push('Para gaming se requiere GPU dedicada y CPU potente.')
+
+    // T1.9: gamesType scoring
+    if (answers.gamesType === 'complex') {
+      scores.graphics += 3
+      specs.rationale.push('Juegos complejos como GTA o FIFA requieren GPU dedicada.')
+    }
+    if (answers.gamesType === 'simple') {
+      scores.graphics += 1
+      specs.rationale.push('Juegos simples como Roblox funcionan con gráficos integrados.')
+    }
   }
 
   if (uses.includes('creating') || answers.photoVideo === 'pro') {
@@ -68,6 +93,13 @@ const convertToSpecs = (answers) => {
     scores.multitasking += 2
     scores.storage += 2
     specs.rationale.push('Creación de contenido profesional requiere potencia y espacio.')
+  }
+
+  // T1.10: photoVideo basic scoring
+  if (answers.photoVideo === 'basic') {
+    scores.graphics += 1
+    scores.storage += 1
+    specs.rationale.push('Edición básica de fotos/videos requiere algo de potencia gráfica y almacenamiento.')
   }
 
   if (uses.includes('work_school') || answers.workload === 'heavy') {
@@ -126,9 +158,7 @@ const convertToSpecs = (answers) => {
           '8 GB'
   }
 
-  if (answers.system === 'mac' && uses.includes('gaming')) {
-    specs.warnings.push('macOS no es compatible con la mayoría de juegos exigentes. Considerá Windows si es prioridad.')
-  }
+  // T1.1: REMOVED duplicate macOS+gaming warning (kept the one at line ~175)
 
   if (answers.system === 'chrome' && (
     answers.photoVideo === 'pro' ||
@@ -180,9 +210,7 @@ const convertToSpecs = (answers) => {
     if (uses.includes('gaming')) {
       specs.warnings.push('macOS no es ideal para juegos exigentes ni es compatible con la mayoría de títulos AAA. Recomendamos Windows.')
     }
-    if (uses.includes('gaming') && answers.system === 'chrome') {
-      specs.warnings.unshift('⚠️ Elegiste "juegos exigentes" pero seleccionaste ChromeOS, que no soporta juegos avanzados. Recomendamos Windows si querés jugar títulos como GTA, FIFA o similares.')
-    }
+    // T1.2: REMOVED dead code (ChromeOS check inside macOS block — impossible path)
     if (specs.gpu.includes('RTX')) {
       specs.warnings.push('Mac no usa GPUs dedicadas tipo RTX, sus chips integrados (M1/M2/M3) tienen gráficas propias.')
       specs.gpu = 'Apple Silicon GPU (M1/M2/M3)'
@@ -218,6 +246,10 @@ const convertToSpecs = (answers) => {
     if (uses.includes('gaming') && answers.gamesType === 'complex') {
       specs.warnings.push('ChromeOS no puede ejecutar juegos complejos como GTA o FIFA.')
     }
+    // T1.2: Moved ChromeOS+gaming warning here (was dead code inside macOS block)
+    if (uses.includes('gaming') && answers.system === 'chrome') {
+      specs.warnings.unshift('⚠️ Elegiste "juegos exigentes" pero seleccionaste ChromeOS, que no soporta juegos avanzados. Recomendamos Windows si querés jugar títulos como GTA, FIFA o similares.')
+    }
     if (specs.gpu.includes('RTX') || specs.processor.includes('i7')) {
       specs.warnings.push('ChromeOS no usa hardware de alto rendimiento como RTX o i7. Recomendamos evitar este OS si necesitás potencia.')
       specs.gpu = 'Gráficos integrados básicos'
@@ -235,7 +267,8 @@ const convertToSpecs = (answers) => {
 
   // ==== 5. RAM recomendada vs real ====
   const idealRam = scores.multitasking >= 4 ? '16 GB' : scores.multitasking >= 2 ? '12 GB' : '8 GB'
-  if (specs.ram !== idealRam) {
+  // T1.4: Only warn if OS is NOT macOS (macOS has its own RAM logic at line 121)
+  if (answers.system !== 'mac' && specs.ram !== idealRam) {
     specs.warnings.push(`Idealmente deberías tener ${idealRam} de RAM para tu uso.`)
   }
 
@@ -258,30 +291,69 @@ const convertToSpecs = (answers) => {
   }
 
   const bestModels = matchLaptopClass(specs)
-  specs.laptopClass = bestModels // 👈 ya es un array de modelos
+  specs.laptopClass = bestModels
+
+  let approximateModels = []
+  if (bestModels.length === 0 || (bestModels.length === 1 && bestModels[0].name === 'Clase genérica')) {
+    approximateModels = matchLaptopClassRelaxed(specs).map(m => ({ ...m, isApproximate: true }))
+  }
+  specs.approximateClass = approximateModels
 
 
   const osFilter = specs.os.toLowerCase()
-  specs.laptopClass = bestModels.filter(m => {
+  const osFiltered = bestModels.filter(m => {
+      // Exclude generic class
+      if (m.name === 'Clase genérica' || m.isGeneric) return false
+
       const name = m.name.toLowerCase()
       if (osFilter.includes('chrome') && !name.includes('chromebook')) return false
       if (osFilter.includes('macos') && !name.includes('macbook')) return false
       if (osFilter.includes('windows') && name.includes('macbook')) return false
       return true
-    }) || []
+    })
 
-if (specs.laptopClass.length === 0) {
-  let fallbackMsg = '⚠️ No encontramos laptops con ';
+  // T1.5/T1.14: When OS filter returns empty, don't fallback to unfiltered models
+  if (osFiltered.length === 0) {
+    let fallbackMsg = '⚠️ No encontramos laptops con ';
 
-  if (specs.os === 'ChromeOS') fallbackMsg += 'ChromeOS ';
-  else if (specs.os === 'macOS') fallbackMsg += 'macOS ';
-  else fallbackMsg += 'el sistema operativo deseado ';
+    if (specs.os === 'ChromeOS') fallbackMsg += 'ChromeOS ';
+    else if (specs.os === 'macOS') fallbackMsg += 'macOS ';
+    else fallbackMsg += 'el sistema operativo deseado ';
 
-  fallbackMsg += 'para tus necesidades. Mostramos opciones similares con Windows.';
+    fallbackMsg += 'para tus necesidades. Mostramos opciones similares con Windows.';
 
-  specs.warnings.push(fallbackMsg);
-  specs.laptopClass = bestModels;
-}
+    specs.warnings.push(fallbackMsg);
+    specs.laptopClass = [];
+  } else {
+    specs.laptopClass = osFiltered;
+  }
+
+  // Also filter approximate models by OS
+  if (specs.approximateClass && specs.approximateClass.length > 0) {
+    const osFilterApprox = specs.os.toLowerCase()
+    specs.approximateClass = specs.approximateClass.filter(m => {
+      const name = m.name.toLowerCase()
+      if (osFilterApprox.includes('chrome') && !name.includes('chromebook')) return false
+      if (osFilterApprox.includes('macos') && !name.includes('macbook')) return false
+      if (osFilterApprox.includes('windows') && name.includes('macbook')) return false
+      return true
+    })
+  }
+
+  // T1.15: Proper fallback when no models match — generate generic spec profile
+  if (specs.laptopClass.length === 0 && (!specs.approximateClass || specs.approximateClass.length === 0)) {
+    specs.laptopClass = [{
+      id: 'generic-recommendation',
+      name: `Laptop recomendada: ${specs.processor}, ${specs.ram} RAM, ${specs.gpu}`,
+      specs: `${specs.processor}, ${specs.ram} RAM, ${specs.storage}, ${specs.gpu}`,
+      gpu: specs.gpu,
+      price: 'Consultar precio',
+      portability: specs.portability,
+      image: '',
+      link: `https://www.google.com/search?q=${encodeURIComponent(`laptop ${specs.processor} ${specs.ram} ${specs.gpu}`)}`,
+      isGeneric: true
+    }]
+  }
 
 
   // Verificación si el modelo tiene menos RAM que la recomendada
@@ -334,9 +406,12 @@ if (specs.laptopClass.length === 0) {
     specs.warnings.unshift('⚠️ Elegiste un uso simple como "ver videos", pero tus respuestas indican tareas exigentes como edición o multitarea pesada. Considerá ajustar tu selección inicial para mejorar la recomendación.')
   }
 
+  // T1.3: Add missing flags
   specs.flags = {
     prioritizePortability: answers.importance === 'portability',
-    prioritizeSecurity: answers.importance === 'security'
+    prioritizeSecurity: answers.importance === 'security',
+    prioritizeGaming: answers.gamesType === 'complex' || uses.includes('gaming'),
+    prioritizeScreenQuality: answers.importance === 'screen'
   }
 
 

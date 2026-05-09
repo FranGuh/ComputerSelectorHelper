@@ -6,9 +6,9 @@ import Quiz from '../pages/Quiz/Quiz'
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="*" element={<Landing />} />
       <Route path="/" element={<Landing />} />
       <Route path="/quiz" element={<Quiz />} />
+      <Route path="*" element={<Landing />} />
     </Routes>
   )
 }
