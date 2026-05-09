@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://computerselectorhelper.vercel.app/sitemap.xml
