@@ -2,7 +2,7 @@
 
 .ComparePage {
   width: 100%;
-  max-width: 100%;
+  max-width: 100dvw;
   padding: var(--spacing-xl, 2rem) var(--spacing-lg, 1.5rem);
   margin: 0 auto;
   box-sizing: border-box;
@@ -166,6 +166,8 @@
   gap: var(--spacing-sm, 0.5rem);
   margin-bottom: var(--spacing-lg, 1.5rem);
   animation: fadeSlideIn 0.2s ease-out;
+  align-items: center;
+  justify-content: center;
 }
 
 @keyframes fadeSlideIn {
