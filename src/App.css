@@ -38,39 +38,70 @@ body {
   font-weight: bold;
 }
 
-h1, h5 {
-  text-align: center;
+/* App Header & Navigation */
+.AppHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 1rem;
   width: 100%;
 }
 
-/* Scroll para navegadores basados en WebKit (Chrome, Edge, Safari) */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+.AppHeader__brand h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  text-align: center;
 }
 
-::-webkit-scrollbar-track {
-  background: #e0e0e0;
-  border-radius: 10px;
+.AppNav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  padding: 0.35rem;
+  border-radius: 999px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  gap: 0.25rem;
 }
 
-::-webkit-scrollbar-thumb {
-  background-color: #62B5E5;
-  /* Azul */
-  border-radius: 10px;
-  border: 2px solid transparent;
-  background-clip: content-box;
+.AppNav__link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #475569;
+  text-decoration: none;
+  transition: all 0.2s ease;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background-color: #62B5E5;
+.AppNav__link:hover {
+  background: rgba(37, 99, 235, 0.08);
+  color: #2563eb;
 }
 
-/* Scroll para Firefox */
-* {
-  scrollbar-width: auto;
-  scrollbar-color: #62B5E5 #e0e0e0;
+.AppNav__link.active {
+  background: #2563eb;
+  color: white;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
 }
+
+.Footer__link {
+  display: block;
+  text-align: center;
+  font-size: 0.83em;
+  font-weight: bold;
+  margin-top: 1.67em;
+  margin-bottom: 1.67em;
+  color: inherit;
+  text-decoration: none;
+}
+
 
 
 /* Botones y anchor — scoped to App to avoid global leaks */

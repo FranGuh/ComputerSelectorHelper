@@ -1,0 +1,44 @@
+.NotFound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-lg, 1.5rem);
+  padding: var(--spacing-2xl, 3rem) var(--spacing-xl, 2rem);
+  text-align: center;
+  min-height: 40vh;
+}
+
+.NotFound__icon {
+  font-size: 4rem;
+  color: var(--color-primary, #2563eb);
+  opacity: 0.6;
+}
+
+.NotFound h2 {
+  font-size: var(--font-size-2xl, 1.5rem);
+  color: var(--color-text, #1e293b);
+  margin: 0;
+}
+
+.NotFound p {
+  color: var(--color-text-muted, #64748b);
+  margin: 0;
+}
+
+.NotFound__btn {
+  background: var(--color-primary, #2563eb);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md, 0.5rem);
+  padding: 0.6rem 1.6rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.NotFound__btn:hover {
+  background: var(--color-primary-hover, #1d4ed8);
+  transform: translateY(-1px);
+}

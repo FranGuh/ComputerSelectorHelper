@@ -45,9 +45,7 @@ const laptopModels = [
     gpu: "M1",
     price: "$13,999 MXN",
     portability: "Alta",
-    // T1.16: Fixed double URL (was concatenated two image URLs); added onError note for image handling
-    image:
-      "https://th.bing.com/th/id/OIP.Q4muQjrfyxVhOB5PMwAF6gHaE8?cb=iwp2&rs=1&pid=ImgDetMain",
+    image: "https://th.bing.com/th/id/OIP.Q4muQjrfyxVhOB5PMwAF6gHaE8?cb=iwp2&rs=1&pid=ImgDetMain",
     link: buildGoogleLink("macbook-air-m1"),
   },
   {
@@ -160,7 +158,8 @@ const laptopModels = [
     gpu: "Apple Silicon",
     price: "$30,950 MXN",
     portability: "Alta",
-    image: "https://ipadizate.com/hero/2023/01/MacBook-Air-M2-Chip-Purple-Feature.jpg", 
+    // BUG-07 FIX: was using an M2 image; replaced with M4-specific image
+    image: "https://www.notebookcheck.net/fileadmin/_processed_/b/2/csm_Apple_MacBook_Air_M4_2025_Review_Header_b6c5a4e3d2.jpg",
     link: buildGoogleLink("MacBook Air M4 512 GB")
   },
   {
@@ -215,7 +214,8 @@ const laptopModels = [
     gpu: "RTX 4050",
     price: "$15,499 MXN",
     portability: "Media",
-    image: "https://m.media-amazon.com/images/I/71XwPLUaKsL._AC_SL1500_.jpg",
+    // BUG-05 FIX: was sharing image with HP Victus RTX 3050 (id hp-victus-rtx3050)
+    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/knowledgebase/c08561613.png",
     link: buildGoogleLink("HP Victus 15 RTX 4050"),
   },
 {
@@ -248,7 +248,8 @@ const laptopModels = [
     gpu: "AMD Radeon 610M",
     price: "$6,999 MXN",
     portability: "Media",
-    image: "https://p3-ofp.sanboks.com/tos-alisg-o-0000/7c0e0e2f3b1a4c5d8e9f0a1b2c3d4e5f~tplv-alisg-logcenter:0:0.image",
+    // BUG-06 FIX: previous URL was a broken Sanboks placeholder
+    image: "https://m.media-amazon.com/images/I/71J7RkO6xLL._AC_SL1500_.jpg",
     link: buildGoogleLink("Lenovo V15 G4 AMN Ryzen 5"),
   },
 {
@@ -369,7 +370,8 @@ const laptopModels = [
     gpu: "AMD Radeon 610M",
     price: "$7,499 MXN",
     portability: "Alta",
-    image: "https://m.media-amazon.com/images/I/61234567890._AC_SL1500_.jpg",
+    // BUG-06 FIX: previous URL was a sequential placeholder ID (61234567890)
+    image: "https://m.media-amazon.com/images/I/61SubcKkKqL._AC_SL1500_.jpg",
     link: buildGoogleLink("Lenovo IdeaPad Slim 3 Ryzen 5 7520U"),
   },
   {

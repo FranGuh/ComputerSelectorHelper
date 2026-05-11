@@ -1,10 +1,8 @@
 # Computer Selector Helper 🖥️
 
-[![CI](https://github.com/FranGuh/ComputerSelectorHelper/actions/workflows/ci.yml/badge.svg)](https://github.com/FranGuh/ComputerSelectorHelper/actions/workflows/ci.yml)
-
 > Respondé unas preguntas y recibí una recomendación personalizada de laptop según tu presupuesto y necesidades reales.
 
-**[🌐 Ver en vivo](https://computerselectorhelper.vercel.app/)**
+**[🌐 Ver en vivo](https://computer-selector-helper.vercel.app/)**
 
 ## ¿Qué es?
 
@@ -49,12 +47,11 @@ Computer Selector Helper es un asistente web que ayuda a usuarios no técnicos a
 - **React Icons** (iconografía)
 - **Vercel Analytics** (métricas)
 - **ESLint 9** (linting)
-- **Vitest** (testing)
 
 ## Cómo Usarlo
 
 ### Para Usuarios
-1. Abrí la app en [computerselectorhelper.vercel.app](https://computerselectorhelper.vercel.app/)
+1. Abrí la app en [computerselectorhelper.vercel.app](https://computer-selector-helper.vercel.app/)
 2. Respondé las 10 preguntas del cuestionario
 3. Revisá tu recomendación técnica
 4. Explorá los modelos sugeridos o usá las specs como guía de compra
@@ -78,10 +75,6 @@ npm run build
 # Linting
 npm run lint
 
-# Testing
-npm run test
-npm run test:coverage
-
 # Preview del build
 npm run preview
 ```
@@ -90,11 +83,6 @@ npm run preview
 
 ```
 src/
-├── __tests__/              # Test suite (Vitest + RTL)
-│   ├── convertToSpecs.test.jsx
-│   ├── matchLaptopClass.test.jsx
-│   ├── Recommendation.test.jsx
-│   └── LaptopCard.test.jsx
 ├── components/
 │   ├── ErrorBoundary/     # Manejo de errores
 │   ├── LaptopCard/        # Tarjeta de modelo de laptop
@@ -126,22 +114,6 @@ El sistema usa un enfoque de scoring ponderado:
 4. **Especificaciones derivadas**: CPU, RAM, GPU, storage se calculan desde los scores
 5. **Validaciones cruzadas**: macOS + gaming, ChromeOS + tareas pesadas, presupuesto bajo + specs altas
 6. **Matching**: Filtrado estricto → scoring → top 3. Si no hay matches, fallback relajado (+30% presupuesto, GPU/OS menos estrictos)
-
-## Testing
-
-```bash
-# Run all tests
-npm run test
-
-# Watch mode
-npm run test:watch
-
-# Coverage report
-npm run test:coverage
-```
-
-**Coverage targets**: 80% inference engine, 60% overall
-**Current**: 90% statements, 85% branches, 86% functions
 
 ## Base de Datos de Laptops
 
