@@ -1,12 +1,17 @@
 import React from 'react'
 import './LaptopCard.css'
 
+// UX-03: heading text differs for approximate matches
 function LaptopCard({ model }) {
   if (!model) return null
 
+  const heading = model.isApproximate
+    ? 'Esta laptop se acerca a tu perfil:'
+    : 'Te sugerimos esta laptop:'
+
   return (
     <div className="LaptopCard">
-      <h3>Te sugerimos esta laptop:</h3>
+      <h3>{heading}</h3>
       <img
         src={model.image}
         alt={model.name}

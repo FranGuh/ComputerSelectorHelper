@@ -1,16 +1,17 @@
-.Quiz{
+.Quiz {
     display: flex;
-    width: auto;
-    height: auto;
-    border-radius: 0.5em;
-    background: #F5F8FA;
-    background: linear-gradient(13deg, rgba(245, 248, 250, 1) 0%, rgb(202, 233, 255) 100%);
+    width: 100%;
+    max-width: 900px;
+    margin: 2rem auto;
+    border-radius: 1.5rem;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     justify-content: center;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    border: 3px solid gray;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.8);
     align-items: center;
     padding: 0;
-    margin: 0;
     flex-direction: column;
 }
 

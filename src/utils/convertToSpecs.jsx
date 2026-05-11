@@ -12,6 +12,7 @@
  * T1.15: Added generic spec-profile fallback when laptopClass is empty
  */
 import matchLaptopClass, { matchLaptopClassRelaxed } from './matchLaptopClass'
+import { isMac, isChromeOS, isWindows } from './osDetector'
 
 const forceAppleSpecs = (specs, scores) => {
   specs.processor = 'Apple M1 / M2 / M3'
@@ -191,6 +192,7 @@ const convertToSpecs = (answers) => {
   specs.battery = scores.battery >= 3 ? 'Alta (8h o más)' : 'Media (4-7h)'
 
   // ==== 3. Sistema operativo filtrado ====
+  // BUG-03 FIX: Added explicit 'any' case so intent is documented
   switch (answers.system) {
     case 'windows':
       specs.os = 'Windows 11'
@@ -201,7 +203,9 @@ const convertToSpecs = (answers) => {
     case 'chrome':
       specs.os = 'ChromeOS'
       break
+    case 'any':
     default:
+      // 'any' or unset → recommend Windows (most compatible)
       specs.os = 'Windows 11'
   }
 
@@ -266,11 +270,9 @@ const convertToSpecs = (answers) => {
   }
 
   // ==== 5. RAM recomendada vs real ====
-  const idealRam = scores.multitasking >= 4 ? '16 GB' : scores.multitasking >= 2 ? '12 GB' : '8 GB'
-  // T1.4: Only warn if OS is NOT macOS (macOS has its own RAM logic at line 121)
-  if (answers.system !== 'mac' && specs.ram !== idealRam) {
-    specs.warnings.push(`Idealmente deberías tener ${idealRam} de RAM para tu uso.`)
-  }
+  // BUG-02 FIX: Removed dead idealRam warning — specs.ram is calculated with identical
+  // logic so the condition specs.ram !== idealRam can never trigger under normal flow.
+  // The only exception (RTX GPU override → 16 GB) is already explained by rationale.
 
   // ==== 6. Validación de coherencia interna de specs ====
   if (specs.gpu.includes('RTX')) {
@@ -305,10 +307,9 @@ const convertToSpecs = (answers) => {
       // Exclude generic class
       if (m.name === 'Clase genérica' || m.isGeneric) return false
 
-      const name = m.name.toLowerCase()
-      if (osFilter.includes('chrome') && !name.includes('chromebook')) return false
-      if (osFilter.includes('macos') && !name.includes('macbook')) return false
-      if (osFilter.includes('windows') && name.includes('macbook')) return false
+      if (osFilter.includes('chrome') && !isChromeOS(m.name)) return false
+      if (osFilter.includes('macos') && !isMac(m.name, m.gpu)) return false
+      if (osFilter.includes('windows') && !isWindows(m.name, m.gpu)) return false
       return true
     })
 
@@ -332,10 +333,9 @@ const convertToSpecs = (answers) => {
   if (specs.approximateClass && specs.approximateClass.length > 0) {
     const osFilterApprox = specs.os.toLowerCase()
     specs.approximateClass = specs.approximateClass.filter(m => {
-      const name = m.name.toLowerCase()
-      if (osFilterApprox.includes('chrome') && !name.includes('chromebook')) return false
-      if (osFilterApprox.includes('macos') && !name.includes('macbook')) return false
-      if (osFilterApprox.includes('windows') && name.includes('macbook')) return false
+      if (osFilterApprox.includes('chrome') && !isChromeOS(m.name)) return false
+      if (osFilterApprox.includes('macos') && !isMac(m.name, m.gpu)) return false
+      if (osFilterApprox.includes('windows') && !isWindows(m.name, m.gpu)) return false
       return true
     })
   }

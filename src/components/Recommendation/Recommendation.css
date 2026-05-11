@@ -172,7 +172,9 @@
 /* Resultados */
 .ResultContainer {
   padding: var(--spacing-xl, 2rem) var(--spacing-lg, 1.5rem);
-  max-width: 1200px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   margin: 0 auto;
   text-align: center;
   background-color: var(--card-bg);
@@ -180,6 +182,13 @@
   box-shadow: var(--shadow-md, 0 4px 6px -1px rgb(0 0 0 / 0.1));
   width: 100%;
   box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .ResultContainer {
+    width: 95vw;
+    padding: var(--spacing-lg, 1.5rem) var(--spacing-sm, 0.5rem);
+  }
 }
 
 .ResultContainer h2 {
@@ -441,19 +450,133 @@
   color: var(--text-muted);
 }
 
-.reintentar {
+/* ===================== Compare Action ===================== */
+.CompareModelsBtn--ingrid {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: var(--spacing-2xl, 3rem);
-  gap: var(--spacing-md, 1rem);
+  gap: var(--spacing-sm, 0.5rem);
+  background: rgba(37, 99, 235, 0.05);
+  color: var(--color-primary);
+  border-radius: var(--radius-lg, 0.75rem);
+  border: 2px dashed rgba(37, 99, 235, 0.3);
+  font-size: var(--font-size-2xl, 1.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 250px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.reintentar p {
-  color: var(--text-muted);
-  font-size: var(--font-size-base, 1rem);
+.CompareModelsBtn__text {
+  text-align: center;
+  display: block;
 }
+
+.CompareModelsBtn__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: white;
+  margin-bottom: var(--spacing-sm);
+  transition: transform 0.2s;
+}
+
+.CompareModelsBtn--ingrid:hover {
+  background: rgba(37, 99, 235, 0.1);
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.CompareModelsBtn--ingrid:hover .CompareModelsBtn__icon {
+  transform: scale(1.1);
+}
+
+/* ===================== Final Actions Grid ===================== */
+.FinalActionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg, 1.5rem);
+  margin-top: var(--spacing-2xl, 3rem);
+  text-align: left;
+}
+
+.ActionCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg, 0.75rem);
+  padding: var(--spacing-xl, 2rem);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm, 0 1px 2px 0 rgb(0 0 0 / 0.05));
+}
+
+.ActionCard h5 {
+  font-size: var(--font-size-lg, 1.125rem);
+  margin: 0 0 var(--spacing-xs, 0.25rem);
+  color: var(--text-dark);
+}
+
+.ActionCard p {
+  color: var(--text-muted);
+  font-size: var(--font-size-sm, 0.875rem);
+  margin-bottom: var(--spacing-lg, 1.5rem);
+  flex-grow: 1;
+}
+
+.ActionCard__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm, 0.5rem);
+}
+
+.ActionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm, 0.5rem);
+  padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
+  border-radius: var(--radius-md, 0.5rem);
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  min-width: 140px;
+  border: none;
+  min-height: 48px; /* Force consistent height for anchor and button tags */
+  box-sizing: border-box;
+}
+
+.ShareBtn {
+  background: #22c55e;
+  color: white;
+}
+.ShareBtn:hover { background: #16a34a; transform: translateY(-1px); }
+.ShareBtn.copied { background: #16a34a; }
+
+.WhatsAppBtn {
+  background: #25d366;
+  color: white;
+}
+.WhatsAppBtn:hover { background: #1ebe5d; transform: translateY(-1px); }
+
+.RestartBtn {
+  background: var(--light-bg);
+  color: var(--text-dark);
+  border: 1px solid var(--border-color);
+}
+.RestartBtn:hover { background: var(--border-color); }
 
 .Modelo__sugerido {
   font-size: var(--font-size-3xl, 1.875rem);
@@ -566,6 +689,7 @@
 }
 .FallbackCard h5 { margin: 0 0 var(--spacing-sm); font-size: var(--font-size-lg); }
 .FallbackCard p { color: var(--color-text-muted); font-size: var(--font-size-sm); margin-bottom: var(--spacing-md); }
+/* BUG-04 FIX: merged two split .FallbackButton blocks into one */
 .FallbackButton {
   display: inline-flex;
   align-items: center;
@@ -578,8 +702,6 @@
   transition: all 0.2s ease;
   cursor: pointer;
   border: none;
-}
-.FallbackButton {
   background: var(--color-primary);
   color: white;
 }
@@ -632,3 +754,38 @@
 }
 
 
+
+/* SharedView Banner */
+.SharedViewBanner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 0.5rem);
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: var(--radius-md, 0.5rem);
+  padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
+  margin-bottom: var(--spacing-lg, 1.5rem);
+  font-size: var(--font-size-sm, 0.875rem);
+  color: #1e40af;
+}
+
+.SharedViewBannerIcon {
+  font-size: 18px;
+  color: #2563eb;
+  flex-shrink: 0;
+}
+
+.SharedViewBannerLink {
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+  text-decoration: underline;
+}
+
+.SharedViewBannerLink:hover {
+  color: #1d4ed8;
+}

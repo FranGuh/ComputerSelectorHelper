@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Helmet } from 'react-helmet-async'
+import { useNavigate } from 'react-router-dom'
 import questions from '../../constants/questions'
 import convertToSpecs from '../../utils/convertToSpecs'
+import { encodeAnswers, decodeAnswers, buildWhatsAppText } from '../../utils/shareUtils'
 import './Recommendation.css'
 import LaptopCard from '../LaptopCard/LaptopCard'
 
@@ -16,7 +18,10 @@ import {
     FaWindows,
     FaExclamationTriangle,
     FaCheckCircle,
-    FaClipboardList
+    FaClipboardList,
+    FaShareAlt,
+    FaCheck,
+    FaInfoCircle
 } from 'react-icons/fa'
 
 
@@ -39,16 +44,39 @@ function Recommendation() {
         return { answers: {}, step: 0, result: null }
     }
 
-    const [answers, setAnswers] = useState(loadSavedState().answers)
-    const [step, setStep] = useState(loadSavedState().step)
-    const [result, setResult] = useState(loadSavedState().result)
+    const initialState = loadSavedState()
+    const navigate = useNavigate()
+    const [answers, setAnswers] = useState(initialState.answers)
+    const [step, setStep] = useState(initialState.step)
+    const [result, setResult] = useState(initialState.result)
     const [showWarnings, setShowWarnings] = useState(true)
     const [showRationale, setShowRationale] = useState(false)
     const [showApproximate, setShowApproximate] = useState(false)
+    const [copied, setCopied] = useState(false)
+    const [isSharedView, setIsSharedView] = useState(false)
 
     useEffect(() => {
         localStorage.setItem('csh_quiz_state', JSON.stringify({ answers, step, result }))
     }, [answers, step, result])
+
+    // UX-05: scroll to top when result renders
+    useEffect(() => {
+        if (result) window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, [result])
+
+    // FEATURE: read shared plan from ?plan= URL param on mount
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search)
+        const plan = params.get('plan')
+        if (plan) {
+            const decoded = decodeAnswers(plan)
+            if (decoded) {
+                setAnswers(decoded)
+                setResult(convertToSpecs(decoded))
+                setIsSharedView(true)
+            }
+        }
+    }, [])
 
     const current = questions[step]
 
@@ -100,10 +128,47 @@ function Recommendation() {
         setAnswers({})
         setStep(0)
         setResult(null)
+        setIsSharedView(false)
         localStorage.removeItem('csh_quiz_state')
+        // Clean URL params from shared links
+        const url = new URL(window.location.href)
+        url.searchParams.delete('plan')
+        window.history.replaceState({}, '', url.toString())
+    }
+
+    // FEATURE: share handler — native share on mobile, clipboard fallback on desktop
+    const handleShare = useCallback(() => {
+        const shareUrl = `${window.location.origin}/quiz?plan=${encodeAnswers(answers)}`
+        const shareText = result
+            ? `Mi laptop recomendada: ${result.processor}, ${result.ram} RAM, ${result.gpu}.`
+            : 'Mi recomendación personalizada de laptop.'
+        if (navigator.share) {
+            navigator.share({
+                title: 'Mi recomendación — Computer Selector Helper',
+                text: shareText,
+                url: shareUrl
+            }).catch(() => {})
+        } else {
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                setCopied(true)
+                setTimeout(() => setCopied(false), 2500)
+            }).catch(() => {
+                prompt('Copiá este link para compartir tu recomendación:', shareUrl)
+            })
+        }
+    }, [answers, result])
+
+    const handleCompare = () => {
+        if (!result || !result.laptopClass) return
+        const ids = result.laptopClass.filter(m => !m.isGeneric).map(m => m.id).join(',')
+        if (ids) {
+            navigate(`/compare?models=${ids}`)
+        }
     }
 
     if (result) {
+        const shareUrl = `${window.location.origin}/quiz?plan=${encodeAnswers(answers)}`
+        const waText = buildWhatsAppText(result, shareUrl)
         return (
             <div className="ResultContainer">
                 <Helmet>
@@ -112,7 +177,17 @@ function Recommendation() {
                     <meta property="og:title" content="Tu recomendación de laptop — Computer Selector Helper" />
                     <meta property="og:description" content={`Te recomendamos: ${result.processor}, ${result.ram} RAM, ${result.gpu}.`} />
                 </Helmet>
-                <h2>Tu recomendación técnica:</h2>
+
+                {/* FEATURE: banner shown when viewing a shared link */}
+                {isSharedView && (
+                    <div className="SharedViewBanner" role="note">
+                        <FaInfoCircle className="SharedViewBannerIcon" aria-hidden="true" />
+                        <span>
+                            Estás viendo la recomendación de alguien más.
+                            {' '}<button className="SharedViewBannerLink" onClick={handleReset}>Hacer mi propio quiz →</button>
+                        </span>
+                    </div>
+                )}
                 <div className="ResultIntroCards">
                     <div className="InfoCard">
                         <div className="InfoCardHeader">
@@ -323,13 +398,60 @@ function Recommendation() {
                             {result.laptopClass.map((model, index) => (
                                 <LaptopCard key={model.id || index} model={model} />
                             ))}
+                            {result.laptopClass.filter(m => !m.isGeneric).length > 0 && (
+                                <button onClick={handleCompare} className="CompareModelsBtn--ingrid">
+                                    <div className="CompareModelsBtn__icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        </svg>
+                                    </div>
+                                    <span className="CompareModelsBtn__text">
+                                        Comparar<br/>estos<br/>modelos
+                                    </span>
+                                </button>
+                            )}
                         </div>
                     </>
                 )}
 
-                <div className='reintentar'>
-                    <p>¿Querés cambiar tus respuestas o probar otra combinación?</p>
-                    <button onClick={handleReset} className='btn-grad'>Reiniciar cuestionario</button>
+                <div className="FinalActionsGrid">
+                    <div className="ActionCard">
+                        <h5>Compartir recomendación</h5>
+                        <p>Guardá este link o envialo a alguien.</p>
+                        <div className="ActionCard__buttons">
+                            <button
+                                id="share-results-btn"
+                                onClick={handleShare}
+                                className={`ActionBtn ShareBtn${copied ? ' copied' : ''}`}
+                                aria-label="Compartir recomendación por link"
+                            >
+                                {copied
+                                    ? <><FaCheck aria-hidden="true" /> Copiado</>
+                                    : <><FaShareAlt aria-hidden="true" /> Copiar Link</>
+                                }
+                            </button>
+                            <a
+                                href={`https://wa.me/?text=${waText}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="ActionBtn WhatsAppBtn"
+                                aria-label="Compartir por WhatsApp"
+                            >
+                                📱 Enviar por WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div className="ActionCard">
+                        <h5>Volver a empezar</h5>
+                        <p>Probá otra combinación de respuestas.</p>
+                        <div className="ActionCard__buttons">
+                            <button onClick={handleReset} className="ActionBtn RestartBtn">
+                                Reiniciar cuestionario
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         )
