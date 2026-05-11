@@ -107,7 +107,7 @@
   color: #1e293b;
   border: 1px solid rgba(255,255,255,0.4);
 }
-.FloatingCard--1 { top: 15%; left: 5%; animation: float 5s ease-in-out infinite alternate; }
+.FloatingCard--1 { bottom: 30%; left: 5%; animation: float 5s ease-in-out infinite alternate; }
 .FloatingCard--2 { bottom: 15%; right: -5%; animation: float 7s ease-in-out infinite alternate-reverse; }
 
 .icon-success { color: #10b981; font-size: 1.25rem; }
