@@ -1,3 +1,5 @@
+[![CI](https://github.com/FranGuh/ComputerSelectorHelper/actions/workflows/ci.yml/badge.svg)](https://github.com/FranGuh/ComputerSelectorHelper/actions/workflows/ci.yml)
+
 # Computer Selector Helper 🖥️
 
 > Respondé unas preguntas y recibí una recomendación personalizada de laptop según tu presupuesto y necesidades reales.
@@ -64,19 +66,19 @@ git clone https://github.com/FranGuh/ComputerSelectorHelper.git
 cd ComputerSelectorHelper
 
 # Instalar dependencias
-npm install
+pnpm install
 
 # Modo desarrollo
-npm run dev
+pnpm run dev
 
 # Build para producción
-npm run build
+pnpm run build
 
 # Linting
-npm run lint
+pnpm run lint
 
 # Preview del build
-npm run preview
+pnpm run preview
 ```
 
 ## Estructura del Proyecto
