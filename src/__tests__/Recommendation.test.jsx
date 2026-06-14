@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import Recommendation from '../components/Recommendation/Recommendation'
+import questions from '../constants/questions'
 
 beforeEach(() => {
   localStorage.clear()
@@ -12,6 +13,25 @@ const renderWithRouter = () => render(
     <Recommendation />
   </MemoryRouter>
 )
+
+// Walks the full quiz, picking the first option for every question.
+// For the technical-level question (INF-01) it picks "yes" or "no" on demand.
+const completeQuiz = ({ technical = true } = {}) => {
+  for (let i = 0; i < questions.length; i++) {
+    const q = questions[i]
+    const checkboxes = screen.queryAllByRole('checkbox')
+    const radios = screen.queryAllByRole('radio')
+    if (q.id === 'isTechnical') {
+      fireEvent.click(radios[technical ? 0 : 1])
+    } else if (checkboxes.length > 0) {
+      fireEvent.click(checkboxes[0])
+    } else if (radios.length > 0) {
+      fireEvent.click(radios[0])
+    }
+    const nextButton = screen.getByRole('button', { name: /siguiente|ver resultados/i })
+    fireEvent.click(nextButton)
+  }
+}
 
 vi.mock('../utils/convertToSpecs', () => ({
   default: vi.fn((answers) => ({
@@ -24,8 +44,9 @@ vi.mock('../utils/convertToSpecs', () => ({
     touchscreen: false,
     portability: 'Media o baja',
     battery: 'Media (4-7h)',
-    warnings: [],
+    warnings: ['⚠️ Advertencia crítica de prueba', 'Nota informativa de prueba'],
     rationale: ['Test rationale'],
+    flags: { isTechnical: answers.isTechnical === 'yes' },
     laptopClass: [
       {
         id: 'test-1',
@@ -92,18 +113,7 @@ describe('Recommendation — Quiz flow', () => {
 
   it('completes quiz and shows results', () => {
     renderWithRouter()
-    // Answer all questions with first option
-    for (let i = 0; i < 10; i++) {
-      const checkboxes = screen.queryAllByRole('checkbox')
-      const radios = screen.queryAllByRole('radio')
-      if (checkboxes.length > 0) {
-        fireEvent.click(checkboxes[0])
-      } else if (radios.length > 0) {
-        fireEvent.click(radios[0])
-      }
-      const nextButton = screen.getByRole('button', { name: /siguiente|ver resultados/i })
-      fireEvent.click(nextButton)
-    }
+    completeQuiz()
     // Should show results — component renders "Especificaciones Recomendadas" heading
     expect(screen.getByText(/especificaciones recomendadas/i)).toBeInTheDocument()
   })
@@ -112,37 +122,14 @@ describe('Recommendation — Quiz flow', () => {
 describe('Recommendation — Results page', () => {
   it('shows laptop cards after quiz completion', () => {
     renderWithRouter()
-    // Answer all questions
-    for (let i = 0; i < 10; i++) {
-      const checkboxes = screen.queryAllByRole('checkbox')
-      const radios = screen.queryAllByRole('radio')
-      if (checkboxes.length > 0) {
-        fireEvent.click(checkboxes[0])
-      } else if (radios.length > 0) {
-        fireEvent.click(radios[0])
-      }
-      const nextButton = screen.getByRole('button', { name: /siguiente|ver resultados/i })
-      fireEvent.click(nextButton)
-    }
-    // Should show laptop cards
+    completeQuiz()
     expect(screen.getByText('Test Laptop 1')).toBeInTheDocument()
     expect(screen.getByText('Test Laptop 2')).toBeInTheDocument()
   })
 
   it('shows spec cards on results page', () => {
     renderWithRouter()
-    // Answer all questions
-    for (let i = 0; i < 10; i++) {
-      const checkboxes = screen.queryAllByRole('checkbox')
-      const radios = screen.queryAllByRole('radio')
-      if (checkboxes.length > 0) {
-        fireEvent.click(checkboxes[0])
-      } else if (radios.length > 0) {
-        fireEvent.click(radios[0])
-      }
-      const nextButton = screen.getByRole('button', { name: /siguiente|ver resultados/i })
-      fireEvent.click(nextButton)
-    }
+    completeQuiz()
     expect(screen.getByText('Procesador')).toBeInTheDocument()
     expect(screen.getByText('RAM')).toBeInTheDocument()
     expect(screen.getByText('Almacenamiento')).toBeInTheDocument()
@@ -151,40 +138,35 @@ describe('Recommendation — Results page', () => {
 
   it('shows reset button on results page', () => {
     renderWithRouter()
-    // Answer all questions
-    for (let i = 0; i < 10; i++) {
-      const checkboxes = screen.queryAllByRole('checkbox')
-      const radios = screen.queryAllByRole('radio')
-      if (checkboxes.length > 0) {
-        fireEvent.click(checkboxes[0])
-      } else if (radios.length > 0) {
-        fireEvent.click(radios[0])
-      }
-      const nextButton = screen.getByRole('button', { name: /siguiente|ver resultados/i })
-      fireEvent.click(nextButton)
-    }
+    completeQuiz()
     expect(screen.getByRole('button', { name: /reiniciar/i })).toBeInTheDocument()
   })
 
   it('resets quiz when reset button is clicked', () => {
     renderWithRouter()
-    // Answer all questions
-    for (let i = 0; i < 10; i++) {
-      const checkboxes = screen.queryAllByRole('checkbox')
-      const radios = screen.queryAllByRole('radio')
-      if (checkboxes.length > 0) {
-        fireEvent.click(checkboxes[0])
-      } else if (radios.length > 0) {
-        fireEvent.click(radios[0])
-      }
-      const nextButton = screen.getByRole('button', { name: /siguiente|ver resultados/i })
-      fireEvent.click(nextButton)
-    }
-    // Click reset
+    completeQuiz()
     const resetButton = screen.getByRole('button', { name: /reiniciar/i })
     fireEvent.click(resetButton)
     // Should be back to first question
     expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
     expect(screen.queryByText(/especificaciones recomendadas/i)).not.toBeInTheDocument()
+  })
+})
+
+describe('Recommendation — Technical level (INF-01)', () => {
+  it('technical user sees the rationale expanded and all warnings', () => {
+    renderWithRouter()
+    completeQuiz({ technical: true })
+    expect(screen.getByText('Test rationale')).toBeInTheDocument()
+    expect(screen.getByText(/advertencia crítica de prueba/i)).toBeInTheDocument()
+    expect(screen.getByText(/nota informativa de prueba/i)).toBeInTheDocument()
+  })
+
+  it('non-technical user sees a collapsed rationale and only critical warnings', () => {
+    renderWithRouter()
+    completeQuiz({ technical: false })
+    expect(screen.queryByText('Test rationale')).not.toBeInTheDocument()
+    expect(screen.getByText(/advertencia crítica de prueba/i)).toBeInTheDocument()
+    expect(screen.queryByText(/nota informativa de prueba/i)).not.toBeInTheDocument()
   })
 })

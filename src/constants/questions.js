@@ -19,6 +19,16 @@ const questions = [
     },
   },
   {
+    id: "isTechnical",
+    type: "radio",
+    question: "¿Qué tanto sabés de computadoras?",
+    info: "Define si te mostramos todos los detalles técnicos o una versión simple.",
+    options: [
+      { value: "yes", label: "Me manejo bien, mostrame todos los detalles" },
+      { value: "no", label: "Prefiero una recomendación simple y clara" },
+    ],
+  },
+  {
     id: "system",
     type: "radio",
     question: "¿Tenés alguna preferencia de sistema?",
@@ -110,7 +120,8 @@ const questions = [
     options: [
       { value: "low", label: "Menos de $5,000 MXN" },
       { value: "medium", label: "Entre $5,000 y $12,000 MXN" },
-      { value: "high", label: "Más de $12,000 MXN" },
+      { value: "high", label: "Entre $12,000 y $25,000 MXN" },
+      { value: "premium", label: "Más de $25,000 MXN" },
     ],
   },
 ];

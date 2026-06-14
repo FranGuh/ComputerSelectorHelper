@@ -411,7 +411,9 @@ const convertToSpecs = (answers) => {
     prioritizePortability: answers.importance === 'portability',
     prioritizeSecurity: answers.importance === 'security',
     prioritizeGaming: answers.gamesType === 'complex' || uses.includes('gaming'),
-    prioritizeScreenQuality: answers.importance === 'screen'
+    prioritizeScreenQuality: answers.importance === 'screen',
+    // INF-01: display-only flag — controls technical vs simplified result view
+    isTechnical: answers.isTechnical === 'yes'
   }
 
 

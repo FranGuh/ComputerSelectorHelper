@@ -64,6 +64,11 @@ function Recommendation() {
         if (result) window.scrollTo({ top: 0, behavior: 'smooth' })
     }, [result])
 
+    // INF-01: technical users get the rationale expanded by default
+    useEffect(() => {
+        if (result) setShowRationale(!!result.flags?.isTechnical)
+    }, [result])
+
     // FEATURE: read shared plan from ?plan= URL param on mount
     useEffect(() => {
         const params = new URLSearchParams(window.location.search)
@@ -169,6 +174,10 @@ function Recommendation() {
     if (result) {
         const shareUrl = `${window.location.origin}/quiz?plan=${encodeAnswers(answers)}`
         const waText = buildWhatsAppText(result, shareUrl)
+        // INF-01: non-technical users only see critical (⚠️) warnings
+        const visibleWarnings = result.flags?.isTechnical
+            ? result.warnings
+            : result.warnings.filter(w => w.includes('⚠️'))
         return (
             <div className="ResultContainer">
                 <Helmet>
@@ -294,14 +303,14 @@ function Recommendation() {
                 </div>
 
 
-                {result.warnings.length > 0 && (
+                {visibleWarnings.length > 0 && (
                     <>
                         <button onClick={() => setShowWarnings(!showWarnings)} className="ToggleSection" aria-expanded={showWarnings} aria-controls="warnings-panel">
                             {showWarnings ? '▲' : '▼'} Advertencias importantes
                         </button>
                         {showWarnings && (
                             <div id="warnings-panel" className="WarningGrid">
-                                {result.warnings.map((warning, index) => (
+                                {visibleWarnings.map((warning, index) => (
                                     <div key={index} className="WarningCard">
                                         <FaExclamationTriangle className="WarningIcon" />
                                         <p className="WarningText">{warning}</p>
