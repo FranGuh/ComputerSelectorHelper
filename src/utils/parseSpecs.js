@@ -100,3 +100,14 @@ export const getBestIndices = (values, higherIsBetter = true) => {
   const best = higherIsBetter ? Math.max(...valid) : Math.min(...valid)
   return values.map(v => v === best && v > 0)
 }
+
+/**
+ * Returns a clamped 0–100 percentage of value relative to max, for spec bars.
+ * @param {number} value
+ * @param {number} max
+ * @returns {number}
+ */
+export const getBarWidth = (value, max) => {
+  if (!value || !max || value <= 0 || max <= 0) return 0
+  return Math.min(100, Math.round((value / max) * 100))
+}

@@ -43,7 +43,7 @@
   transform: translateX(-2px);
 }
 
-.CompareHeader h2 {
+.CompareHeader h1 {
   font-size: var(--font-size-2xl, 1.5rem);
   color: var(--color-text, #1e293b);
   margin: 0 0 var(--spacing-xs) 0;
@@ -522,4 +522,46 @@
   .CompareTable__modelName {
     font-size: 0.8rem;
   }
+}
+
+/* ---------------------------------------------------------------------------
+   Dark theme overrides
+   White input/card/image backgrounds become the surface token; blue/green
+   highlight tints get dark-friendly equivalents. Light mode is left untouched.
+   --------------------------------------------------------------------------- */
+:root[data-theme='dark'] .CompareSearchInput,
+:root[data-theme='dark'] .CompareSelect,
+:root[data-theme='dark'] .CompareModelCard,
+:root[data-theme='dark'] .CompareSelectedChip__img,
+:root[data-theme='dark'] .CompareTable__modelImg {
+  background: var(--color-surface);
+}
+
+:root[data-theme='dark'] .CompareGridToggleBtn:hover {
+  background: rgba(59, 130, 246, 0.15);
+}
+
+:root[data-theme='dark'] .CompareSelectedChip {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.35);
+}
+
+:root[data-theme='dark'] .CompareSelectedChip__remove {
+  background: rgba(59, 130, 246, 0.35);
+  color: var(--color-text);
+}
+:root[data-theme='dark'] .CompareSelectedChip__remove:hover {
+  background: rgba(59, 130, 246, 0.5);
+}
+
+:root[data-theme='dark'] .CompareModelCard.selected {
+  background: rgba(59, 130, 246, 0.15);
+}
+
+:root[data-theme='dark'] .CompareTable__cell.best {
+  background: rgba(52, 211, 153, 0.12);
+}
+
+:root[data-theme='dark'] .BestBadge {
+  color: #34d399;
 }

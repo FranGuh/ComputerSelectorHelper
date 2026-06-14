@@ -1,5 +1,7 @@
 import { describe, it, expect, test } from 'vitest'
-import matchLaptopClass from '../utils/matchLaptopClass'
+import matchLaptopClass, { matchLaptopClassRelaxed } from '../utils/matchLaptopClass'
+
+const priceOf = (model) => parseInt(model.price.replace(/[^\d]/g, ''), 10)
 
 const baseSpecs = {
   processor: 'Intel i5 / Ryzen 5',
@@ -290,5 +292,49 @@ describe('matchLaptopClass — Results are sorted by score', () => {
         expect(results[i].matchScore).toBeGreaterThanOrEqual(results[i + 1].matchScore)
       }
     }
+  })
+})
+
+describe('matchLaptopClass — Premium budget bucket (INF-02)', () => {
+  // High-end specs so premium-priced models score into the top results
+  const demandingSpecs = {
+    ...baseSpecs,
+    processor: 'Intel i7 / Ryzen 7',
+    ram: '16 GB',
+    gpu: 'NVIDIA RTX 3050 o superior',
+  }
+
+  it('premium budget returns only models priced above $25,000', () => {
+    const results = matchLaptopClass({ ...baseSpecs, budget: 'premium' })
+    expect(results.length).toBeGreaterThan(0)
+    results.forEach(model => {
+      expect(priceOf(model)).toBeGreaterThan(25000)
+    })
+  })
+
+  it('premium budget surfaces high-end demanding models above $25,000', () => {
+    const results = matchLaptopClass({ ...demandingSpecs, budget: 'premium' })
+    expect(results.length).toBeGreaterThan(0)
+    results.forEach(model => {
+      expect(priceOf(model)).toBeGreaterThan(25000)
+    })
+  })
+
+  it('high budget now excludes premium models (caps around $25,000)', () => {
+    // Under the old unbounded "high" rule, premium-priced RTX models leaked in here.
+    const results = matchLaptopClass({ ...demandingSpecs, budget: 'high' })
+    expect(results.length).toBeGreaterThan(0)
+    results.forEach(model => {
+      expect(priceOf(model)).toBeLessThanOrEqual(26000)
+      expect(priceOf(model)).toBeGreaterThanOrEqual(13000)
+    })
+  })
+
+  it('relaxed premium matching enforces an $18,000 floor', () => {
+    const results = matchLaptopClassRelaxed({ ...baseSpecs, budget: 'premium' })
+    expect(results.length).toBeGreaterThan(0)
+    results.forEach(model => {
+      expect(priceOf(model)).toBeGreaterThanOrEqual(18000)
+    })
   })
 })

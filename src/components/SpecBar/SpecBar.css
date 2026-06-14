@@ -1,0 +1,44 @@
+.SpecBar {
+  width: 100%;
+  height: 6px;
+  margin-top: 0.4rem;
+  background: var(--color-border, #e2e8f0);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.SpecBar__fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* Metric-specific colors — distinct hues, each WCAG-AA against the track */
+.SpecBar--ram .SpecBar__fill {
+  background: #2563eb;
+}
+
+.SpecBar--storage .SpecBar__fill {
+  background: #059669;
+}
+
+.SpecBar--gpu .SpecBar__fill {
+  background: #7c3aed;
+}
+
+/* ---------------------------------------------------------------------------
+   Dark theme overrides
+   The track darkens via --color-border, so the metric fills are lightened to
+   keep WCAG-AA contrast against it. Light mode is left untouched.
+   --------------------------------------------------------------------------- */
+:root[data-theme='dark'] .SpecBar--ram .SpecBar__fill {
+  background: #60a5fa;
+}
+
+:root[data-theme='dark'] .SpecBar--storage .SpecBar__fill {
+  background: #34d399;
+}
+
+:root[data-theme='dark'] .SpecBar--gpu .SpecBar__fill {
+  background: #a78bfa;
+}

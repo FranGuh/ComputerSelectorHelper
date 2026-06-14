@@ -343,3 +343,38 @@ describe('convertToSpecs — RAM comparison edge cases', () => {
     expect(specs.ram).toBe('12 GB')
   })
 })
+
+describe('convertToSpecs — Technical level (INF-01)', () => {
+  it('sets flags.isTechnical true for a technical user', () => {
+    const specs = convertToSpecs({ ...baseAnswers, isTechnical: 'yes' })
+    expect(specs.flags?.isTechnical).toBe(true)
+  })
+
+  it('sets flags.isTechnical false for a non-technical user', () => {
+    const specs = convertToSpecs({ ...baseAnswers, isTechnical: 'no' })
+    expect(specs.flags?.isTechnical).toBe(false)
+  })
+
+  it('defaults flags.isTechnical to false when the question is unanswered', () => {
+    const specs = convertToSpecs({ ...baseAnswers })
+    expect(specs.flags?.isTechnical).toBe(false)
+  })
+})
+
+describe('convertToSpecs — Premium budget (INF-02)', () => {
+  it('stores premium budget from answers', () => {
+    const specs = convertToSpecs({ ...baseAnswers, budget: 'premium' })
+    expect(specs.budget).toBe('premium')
+  })
+
+  it('does not warn about a low budget for premium + demanding use', () => {
+    const specs = convertToSpecs({
+      ...baseAnswers,
+      budget: 'premium',
+      mainUse: ['gaming', 'creating'],
+      gamesType: 'complex',
+    })
+    expect(specs.warnings.every(w => !w.toLowerCase().includes('presupuesto bajo'))).toBe(true)
+    expect(specs.warnings.every(w => !w.toLowerCase().includes('rtx requiere'))).toBe(true)
+  })
+})

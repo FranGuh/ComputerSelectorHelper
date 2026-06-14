@@ -5,6 +5,19 @@
     <link rel="icon" type="image/svg+xml" href="/help.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Computer Selector Helper</title>
+    <script>
+      // Apply the saved/system theme before first paint to avoid a flash (FOUC).
+      // Mirrors the logic in src/hooks/useTheme.js (localStorage key 'csh-theme').
+      (function () {
+        try {
+          var stored = localStorage.getItem('csh-theme');
+          var theme = stored === 'light' || stored === 'dark'
+            ? stored
+            : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) { /* private mode / no storage — fall back to light */ }
+      })();
+    </script>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",

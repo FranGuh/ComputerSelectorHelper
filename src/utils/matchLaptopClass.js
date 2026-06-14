@@ -93,13 +93,14 @@ const matchLaptopClass = (specs) => {
       !modelSpecs.includes('i7') && !modelSpecs.includes('ryzen 7')
     ) return false
 
-    // DT-01: Budget thresholds include a small tolerance above the quiz labels.
-    // Quiz labels: low=<$5k, medium=$5k-$12k, high=>$12k.
-    // Matcher allows low up to $6k and medium up to $13k to capture edge pricing.
+    // DT-01 / INF-02: Budget thresholds include a small tolerance above the quiz labels.
+    // Quiz labels: low=<$5k, medium=$5k-$12k, high=$12k-$25k, premium=>$25k.
+    // Matcher allows ~$1k tolerance on each upper edge to capture edge pricing.
     const price = parsePrice(model.price)
     if (specs.budget === 'low' && price > 6000) return false
     if (specs.budget === 'medium' && price > 13000) return false
-    if (specs.budget === 'high' && price < 13000) return false
+    if (specs.budget === 'high' && (price < 13000 || price > 26000)) return false
+    if (specs.budget === 'premium' && price < 25000) return false
 
     return true
   })
@@ -162,7 +163,8 @@ export const matchLaptopClassRelaxed = (specs) => {
     const price = parsePrice(model.price)
     const budgetLimit = specs.budget === 'low' ? 7800 : specs.budget === 'medium' ? 16900 : Infinity
     if (specs.budget === 'high' && price < 10000) return false
-    if (specs.budget !== 'high' && price > budgetLimit) return false
+    if (specs.budget === 'premium' && price < 18000) return false
+    if (specs.budget !== 'high' && specs.budget !== 'premium' && price > budgetLimit) return false
     return true
   })
 

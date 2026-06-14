@@ -1,11 +1,16 @@
+/*
+ * Local aliases map onto the global design tokens so they automatically
+ * follow the active theme (light/dark). Light-mode values are identical to
+ * the previous hard-coded hexes, so light mode is unchanged.
+ */
 :root {
-  --primary-color: #2563eb;
-  --primary-hover: #1d4ed8;
-  --light-bg: #f8fafc;
-  --border-color: #e2e8f0;
-  --text-dark: #1e293b;
-  --text-muted: #64748b;
-  --card-bg: #ffffff;
+  --primary-color: var(--color-primary);
+  --primary-hover: var(--color-primary-hover);
+  --light-bg: var(--color-background);
+  --border-color: var(--color-border);
+  --text-dark: var(--color-text);
+  --text-muted: var(--color-text-muted);
+  --card-bg: var(--color-surface);
 }
 
 
@@ -201,6 +206,13 @@
   font-size: var(--font-size-xl, 1.25rem);
   margin: 0;
   color: var(--text-dark);
+}
+
+.ResultTitle {
+  font-size: var(--font-size-3xl, 1.875rem);
+  text-align: center;
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-xl, 2rem);
 }
 
 .ResultIntro {
@@ -520,7 +532,7 @@
   box-shadow: var(--shadow-sm, 0 1px 2px 0 rgb(0 0 0 / 0.05));
 }
 
-.ActionCard h5 {
+.ActionCard h2 {
   font-size: var(--font-size-lg, 1.125rem);
   margin: 0 0 var(--spacing-xs, 0.25rem);
   color: var(--text-dark);
@@ -640,7 +652,7 @@
   text-align: center;
 }
 .NoResultsIcon { font-size: 40px; color: #f59e0b; }
-.NoResults h4 { color: #92400e; margin: 0; font-size: var(--font-size-lg); }
+.NoResults h2 { color: #92400e; margin: 0; font-size: var(--font-size-lg); }
 .NoResults p { color: #78350f; max-width: 500px; }
 .NoResultsButton {
   display: inline-flex;
@@ -674,7 +686,7 @@
   margin-bottom: var(--spacing-lg);
 }
 .FallbackIcon { font-size: 24px; color: var(--color-warning); }
-.FallbackHeader h4 { margin: 0; color: var(--color-text); }
+.FallbackHeader h2 { margin: 0; color: var(--color-text); font-size: var(--font-size-xl); }
 .FallbackChoice {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -687,7 +699,7 @@
   border: 1px solid var(--color-border);
   text-align: center;
 }
-.FallbackCard h5 { margin: 0 0 var(--spacing-sm); font-size: var(--font-size-lg); }
+.FallbackCard h3 { margin: 0 0 var(--spacing-sm); font-size: var(--font-size-lg); }
 .FallbackCard p { color: var(--color-text-muted); font-size: var(--font-size-sm); margin-bottom: var(--spacing-md); }
 /* BUG-04 FIX: merged two split .FallbackButton blocks into one */
 .FallbackButton {
@@ -724,7 +736,7 @@
   padding-top: var(--spacing-lg);
   border-top: 1px solid var(--color-border);
 }
-.ApproximateSection h5 {
+.ApproximateSection h3 {
   text-align: center;
   color: var(--color-text-muted);
   margin-bottom: var(--spacing-lg);
@@ -788,4 +800,80 @@
 
 .SharedViewBannerLink:hover {
   color: #1d4ed8;
+}
+
+/* ---------------------------------------------------------------------------
+   Dark theme overrides
+   Semantic tint cards (warning=red, rationale=green, no-results=amber,
+   info=blue) keep their meaning but switch to dark surfaces with lighter
+   accent text for contrast. Light mode is left untouched.
+   --------------------------------------------------------------------------- */
+
+/* Selected / hovered quiz option — blue tint */
+:root[data-theme='dark'] .Question__label:hover,
+:root[data-theme='dark'] .Question__label:has(.Question__input:checked) {
+  background-color: rgba(59, 130, 246, 0.15);
+}
+
+/* Warning card — red */
+:root[data-theme='dark'] .WarningCard {
+  background-color: rgba(248, 113, 113, 0.1);
+  border-color: rgba(248, 113, 113, 0.35);
+}
+:root[data-theme='dark'] .WarningIcon {
+  color: #f87171;
+}
+:root[data-theme='dark'] .WarningText {
+  color: #fca5a5;
+}
+
+/* Rationale card — green */
+:root[data-theme='dark'] .RationaleCard {
+  background-color: rgba(52, 211, 153, 0.1);
+  border-color: rgba(52, 211, 153, 0.3);
+}
+:root[data-theme='dark'] .RationaleIcon {
+  color: #34d399;
+}
+:root[data-theme='dark'] .RationaleText {
+  color: #6ee7b7;
+}
+
+/* No-results card — amber */
+:root[data-theme='dark'] .NoResults {
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.3);
+}
+:root[data-theme='dark'] .NoResultsIcon {
+  color: #fbbf24;
+}
+:root[data-theme='dark'] .NoResults h2 {
+  color: #fcd34d;
+}
+:root[data-theme='dark'] .NoResults p {
+  color: #fde68a;
+}
+
+/* Compare CTA — dashed primary tint */
+:root[data-theme='dark'] .CompareModelsBtn--ingrid {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+:root[data-theme='dark'] .CompareModelsBtn--ingrid:hover {
+  background: rgba(59, 130, 246, 0.16);
+  border-color: var(--color-primary);
+}
+
+/* Shared-view banner — blue */
+:root[data-theme='dark'] .SharedViewBanner {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.35);
+  color: #bfdbfe;
+}
+:root[data-theme='dark'] .SharedViewBannerIcon,
+:root[data-theme='dark'] .SharedViewBannerLink {
+  color: var(--color-primary-hover);
+}
+:root[data-theme='dark'] .SharedViewBannerLink:hover {
+  color: #93c5fd;
 }
