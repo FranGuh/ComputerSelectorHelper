@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import questions from '../../constants/questions'
 import convertToSpecs from '../../utils/convertToSpecs'
 import { encodeAnswers, decodeAnswers, buildWhatsAppText } from '../../utils/shareUtils'
+import { addEntry } from '../../utils/historyStore'
 import './Recommendation.css'
 import LaptopCard from '../LaptopCard/LaptopCard'
 
@@ -125,7 +126,18 @@ function Recommendation() {
         if (step < questions.length - 1) {
             setStep(prev => prev + 1)
         } else {
-            setResult(convertToSpecs(answers))
+            const specs = convertToSpecs(answers)
+            setResult(specs)
+            // F-02: persist this completed quiz to the Landing history
+            addEntry({
+                encodedAnswers: encodeAnswers(answers),
+                summary: {
+                    processor: specs.processor,
+                    ram: specs.ram,
+                    gpu: specs.gpu,
+                    budget: specs.budget,
+                },
+            })
         }
     }
 
@@ -165,7 +177,7 @@ function Recommendation() {
 
     const handleCompare = () => {
         if (!result || !result.laptopClass) return
-        const ids = result.laptopClass.filter(m => !m.isGeneric).map(m => m.id).join(',')
+        const ids = result.laptopClass.filter(m => !m.isGeneric).map(m => m.id).slice(0, 3).join(',')
         if (ids) {
             navigate(`/compare?models=${ids}`)
         }
