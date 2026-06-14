@@ -12,7 +12,7 @@ const Quiz = () => {
         <meta property="og:title" content="Cuestionario — Computer Selector Helper" />
         <meta property="og:description" content="Respondé nuestro cuestionario para recibir una recomendación de laptop personalizada." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://computerselectorhelper.vercel.app/quiz" />
+        <meta property="og:url" content="https://computer-selector-helper.vercel.app/quiz" />
       </Helmet>
       <div className="Quiz">
           <Recommendation />

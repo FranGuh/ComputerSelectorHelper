@@ -2,7 +2,7 @@
 
 > Asistente web que recomienda laptops a usuarios no técnicos según su uso, presupuesto y preferencias. Un cuestionario de 11 preguntas devuelve especificaciones recomendadas (CPU, GPU, RAM, almacenamiento) y modelos reales con precios aproximados en pesos mexicanos (MXN). Las recomendaciones son ORIENTATIVAS: una referencia para comparar, no asesoría de compra definitiva.
 
-App en vivo: https://computerselectorhelper.vercel.app/
+App en vivo: https://computer-selector-helper.vercel.app/
 
 ## Qué hace
 

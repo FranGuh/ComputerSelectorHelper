@@ -53,7 +53,7 @@ Computer Selector Helper es un asistente web que ayuda a usuarios no técnicos a
 ## Cómo Usarlo
 
 ### Para Usuarios
-1. Abrí la app en [computerselectorhelper.vercel.app](https://computer-selector-helper.vercel.app/)
+1. Abrí la app en [computer-selector-helper.vercel.app](https://computer-selector-helper.vercel.app/)
 2. Respondé las 10 preguntas del cuestionario
 3. Revisá tu recomendación técnica
 4. Explorá los modelos sugeridos o usá las specs como guía de compra

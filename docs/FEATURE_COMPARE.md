@@ -128,7 +128,7 @@ getBestIndices(values[], higherIsBetter) → boolean[]  // marca ganadores
 ## URL de comparación compartida
 
 ```
-https://computerselectorhelper.vercel.app/compare?models=macbook-air-m2,asus-tuf-a15-rtx4060,hp-victus-15-rtx4050
+https://computer-selector-helper.vercel.app/compare?models=macbook-air-m2,asus-tuf-a15-rtx4060,hp-victus-15-rtx4050
 ```
 
 - Los IDs son los `id` de cada objeto en `laptopModels.js`
