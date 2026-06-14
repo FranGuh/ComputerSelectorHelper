@@ -168,7 +168,7 @@ function Compare() {
         <title>Comparar laptops — Computer Selector Helper</title>
         <meta name="description" content="Compará hasta 3 laptops lado a lado: procesador, RAM, almacenamiento, GPU y precio." />
         <meta property="og:title" content="Comparar laptops — Computer Selector Helper" />
-        <meta property="og:url" content="https://computerselectorhelper.vercel.app/compare" />
+        <meta property="og:url" content="https://computer-selector-helper.vercel.app/compare" />
       </Helmet>
 
       {/* Header */}

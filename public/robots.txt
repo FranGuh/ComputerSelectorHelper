@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /quiz?plan=
 
-Sitemap: https://computerselectorhelper.vercel.app/sitemap.xml
+Sitemap: https://computer-selector-helper.vercel.app/sitemap.xml

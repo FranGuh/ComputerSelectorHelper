@@ -11,7 +11,7 @@
 
 Una web app que ayuda a usuarios no técnicos a elegir una laptop. El usuario contesta un quiz de 10 preguntas (uso, presupuesto, OS, gaming, etc.) y recibe specs recomendadas + modelos concretos con precios en MXN.
 
-**URL producción:** `https://computerselectorhelper.vercel.app`
+**URL producción:** `https://computer-selector-helper.vercel.app`
 
 ---
 
