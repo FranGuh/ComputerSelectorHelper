@@ -25,3 +25,6 @@ dist-ssr
 *.sw?
 coverage/
 package-lock.json
+
+# Local agent tooling cache (not part of the project)
+.atl/
