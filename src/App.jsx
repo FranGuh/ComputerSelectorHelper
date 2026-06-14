@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async'
 import AppRoutes from './routes/AppRoutes'
 import { Analytics } from "@vercel/analytics/react"
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary'
+import ThemeToggle from './components/ThemeToggle/ThemeToggle'
 
 function App() {
   return (
@@ -15,11 +16,14 @@ function App() {
               Computer Selector <span className='title__alter'>Helper</span>
             </Link>
           </div>
-          <nav className="AppNav" aria-label="Navegación principal">
-            <NavLink to="/" end className={({ isActive }) => isActive ? 'AppNav__link active' : 'AppNav__link'}>Inicio</NavLink>
-            <NavLink to="/quiz" className={({ isActive }) => isActive ? 'AppNav__link active' : 'AppNav__link'}>Quiz</NavLink>
-            <NavLink to="/compare" className={({ isActive }) => isActive ? 'AppNav__link active' : 'AppNav__link'}>Comparar</NavLink>
-          </nav>
+          <div className="AppHeader__actions">
+            <nav className="AppNav" aria-label="Navegación principal">
+              <NavLink to="/" end className={({ isActive }) => isActive ? 'AppNav__link active' : 'AppNav__link'}>Inicio</NavLink>
+              <NavLink to="/quiz" className={({ isActive }) => isActive ? 'AppNav__link active' : 'AppNav__link'}>Quiz</NavLink>
+              <NavLink to="/compare" className={({ isActive }) => isActive ? 'AppNav__link active' : 'AppNav__link'}>Comparar</NavLink>
+            </nav>
+            <ThemeToggle />
+          </div>
         </header>
         <main>
           <ErrorBoundary>

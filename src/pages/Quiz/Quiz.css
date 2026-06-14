@@ -21,3 +21,14 @@
     justify-content: center;
     margin-bottom: var(--spacing-sm);
 }
+
+/* ---------------------------------------------------------------------------
+   Dark theme overrides
+   The translucent-white glass card would read as a bright blob on the dark
+   background, so it switches to dark glass. Light mode is left untouched.
+   --------------------------------------------------------------------------- */
+:root[data-theme='dark'] .Quiz {
+    background: rgba(30, 41, 59, 0.6);
+    border-color: rgba(148, 163, 184, 0.2);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}

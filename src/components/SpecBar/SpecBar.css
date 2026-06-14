@@ -25,3 +25,20 @@
 .SpecBar--gpu .SpecBar__fill {
   background: #7c3aed;
 }
+
+/* ---------------------------------------------------------------------------
+   Dark theme overrides
+   The track darkens via --color-border, so the metric fills are lightened to
+   keep WCAG-AA contrast against it. Light mode is left untouched.
+   --------------------------------------------------------------------------- */
+:root[data-theme='dark'] .SpecBar--ram .SpecBar__fill {
+  background: #60a5fa;
+}
+
+:root[data-theme='dark'] .SpecBar--storage .SpecBar__fill {
+  background: #34d399;
+}
+
+:root[data-theme='dark'] .SpecBar--gpu .SpecBar__fill {
+  background: #a78bfa;
+}

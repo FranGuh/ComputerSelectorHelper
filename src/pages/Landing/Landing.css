@@ -267,3 +267,56 @@
   }
   .FloatingCard { display: none; /* Hide complex floating elements on mobile */ }
 }
+
+/* ---------------------------------------------------------------------------
+   Dark theme overrides
+   Light mode is left untouched; only hard-coded colours that don't already
+   resolve through a design token are remapped here.
+   --------------------------------------------------------------------------- */
+:root[data-theme='dark'] .LandingHero__title,
+:root[data-theme='dark'] .FeatureCard h3,
+:root[data-theme='dark'] .LandingHistory__title,
+:root[data-theme='dark'] .HistoryCard,
+:root[data-theme='dark'] .HistoryCard:hover {
+  color: var(--color-text);
+}
+
+:root[data-theme='dark'] .LandingHero__subtitle,
+:root[data-theme='dark'] .FeatureCard p,
+:root[data-theme='dark'] .HistoryCard__budget {
+  color: var(--color-text-muted);
+}
+
+:root[data-theme='dark'] .FloatingCard {
+  background: rgba(30, 41, 59, 0.55);
+  border-color: rgba(148, 163, 184, 0.25);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  color: var(--color-text);
+}
+
+:root[data-theme='dark'] .FeatureCard,
+:root[data-theme='dark'] .HistoryCard {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+:root[data-theme='dark'] .FeatureCard__icon {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--color-primary);
+}
+
+:root[data-theme='dark'] .HistoryCard__cta {
+  color: var(--color-primary);
+}
+
+:root[data-theme='dark'] .Badge {
+  background: rgba(59, 130, 246, 0.18);
+  color: var(--color-primary);
+  border-color: rgba(59, 130, 246, 0.35);
+}
+
+:root[data-theme='dark'] .LandingHistory__clear:hover {
+  color: var(--color-error);
+  border-color: rgba(248, 113, 113, 0.4);
+  background: rgba(248, 113, 113, 0.12);
+}
