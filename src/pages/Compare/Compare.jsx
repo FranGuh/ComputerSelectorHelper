@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async'
 import { useNavigate } from 'react-router-dom'
 import laptopModels from '../../utils/laptopModels'
 import { parseModelSpecs, getBestIndices } from '../../utils/parseSpecs'
+import SpecBar from '../../components/SpecBar/SpecBar'
 import './Compare.css'
 import { FaPlus, FaTimes, FaSearch, FaArrowLeft, FaChevronUp, FaChevronDown } from 'react-icons/fa'
 
@@ -148,6 +149,11 @@ function Compare() {
   const bestRam = getBestIndices(parsedModels.map(p => p.ram), true)
   const bestStorage = getBestIndices(parsedModels.map(p => p.storageGB), true)
   const bestGPU = getBestIndices(parsedModels.map(p => p.gpuTier), true)
+
+  // compare-viz: per-row maxima for proportional spec bars
+  const maxRam = Math.max(0, ...parsedModels.map(p => p.ram))
+  const maxStorage = Math.max(0, ...parsedModels.map(p => p.storageGB))
+  const maxGpuTier = Math.max(0, ...parsedModels.map(p => p.gpuTier))
 
   const handleShare = () => {
     const url = `${window.location.origin}/compare?models=${selectedIds.join(',')}`
@@ -357,6 +363,7 @@ function Compare() {
                     <td key={selectedModels[i].id} className={`CompareTable__cell${bestRam[i] ? ' best' : ''}`}>
                       {p.ram > 0 ? `${p.ram} GB` : 'N/A'}
                       {bestRam[i] && <span className="BestBadge">Mayor RAM</span>}
+                      {p.ram > 0 && <SpecBar value={p.ram} max={maxRam} metric="ram" ariaLabel={`${p.ram} GB de RAM`} />}
                     </td>
                   ))}
                 </tr>
@@ -367,6 +374,7 @@ function Compare() {
                     <td key={selectedModels[i].id} className={`CompareTable__cell${bestStorage[i] ? ' best' : ''}`}>
                       {p.storageLabel}
                       {bestStorage[i] && <span className="BestBadge">Mayor storage</span>}
+                      {p.storageGB > 0 && <SpecBar value={p.storageGB} max={maxStorage} metric="storage" ariaLabel={`${p.storageLabel} de almacenamiento`} />}
                     </td>
                   ))}
                 </tr>
@@ -377,6 +385,7 @@ function Compare() {
                     <td key={m.id} className={`CompareTable__cell${bestGPU[i] ? ' best' : ''}`}>
                       {m.gpu}
                       {bestGPU[i] && <span className="BestBadge">Mejor GPU</span>}
+                      {parsedModels[i].gpuTier > 0 && <SpecBar value={parsedModels[i].gpuTier} max={maxGpuTier} metric="gpu" ariaLabel={`GPU nivel ${parsedModels[i].gpuTier} de ${maxGpuTier}`} />}
                     </td>
                   ))}
                 </tr>
