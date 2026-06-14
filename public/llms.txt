@@ -1,0 +1,43 @@
+# Computer Selector Helper
+
+> Asistente web que recomienda laptops a usuarios no técnicos según su uso, presupuesto y preferencias. Un cuestionario de 11 preguntas devuelve especificaciones recomendadas (CPU, GPU, RAM, almacenamiento) y modelos reales con precios aproximados en pesos mexicanos (MXN). Las recomendaciones son ORIENTATIVAS: una referencia para comparar, no asesoría de compra definitiva.
+
+App en vivo: https://computerselectorhelper.vercel.app/
+
+## Qué hace
+
+- Motor de inferencia que puntúa rendimiento, gráficos, multitarea, portabilidad, batería y almacenamiento a partir de las respuestas, y deriva las specs recomendadas.
+- Matchea esas specs contra un catálogo de 35+ modelos y devuelve hasta 3 sugerencias (con fallback a modelos aproximados si no hay match exacto).
+- Valida combinaciones inviables (ej.: gaming en macOS, tareas pesadas en ChromeOS, specs altas con presupuesto bajo).
+
+## Cómo usarla (también de forma programática)
+
+El estado vive en la URL, así que se puede enlazar y compartir sin backend:
+
+- Quiz con respuestas precargadas: `/quiz?plan=<base64>`, donde `<base64>` = base64(JSON.stringify(answers)).
+- Comparador: `/compare?models=<id1,id2,id3>` (hasta 3 ids de modelo del catálogo).
+
+Forma del objeto `answers` (claves = id de pregunta):
+
+- mainUse: array de ["basics","entertainment","gaming","work_school","creating","family"], o el string "full_use"
+- isTechnical: "yes" | "no"  (controla la vista técnica vs simplificada del resultado)
+- system: "windows" | "mac" | "chrome" | "any"
+- workload: "light" | "heavy"
+- webBrowsing: "light" | "heavy"
+- photoVideo: "none" | "basic" | "pro"
+- gamesType: "none" | "simple" | "complex"
+- location: "desk" | "homeMobile" | "mobile"
+- battery: "yes" | "no"
+- importance: "screen" | "touch" | "portability" | "performance" | "security" | "unknown"
+- budget: "low" (<$5,000) | "medium" ($5,000–$12,000) | "high" ($12,000–$25,000) | "premium" (>$25,000), en MXN
+
+## Catálogo
+
+35+ modelos organizados por rango de precio (MXN): budget (<$5k), entry-mid ($5k–$8k), mid ($8k–$12k), mid-high ($12k–$16k), upper-mid ($16k–$20k), high ($20k–$35k), enthusiast ($35k+). GPUs cubiertas: Intel UHD / Iris Xe / Arc, AMD Radeon (Vega, 610M), NVIDIA GTX 1650 y RTX 4050–4070, Apple M1–M4, Mali-G52.
+
+## Notas para agentes
+
+- Es una REFERENCIA orientativa: precios aproximados, enfocados en el mercado mexicano, sin afiliación con marcas ni patrocinios.
+- Los resultados del quiz se calculan en el cliente (SPA); este archivo resume la herramienta para que un agente la entienda sin ejecutar JavaScript.
+- No hay API pública ni endpoint REST: la integración es únicamente vía las URLs de arriba.
+- Licencia MIT. Autor: @FranGuh.
