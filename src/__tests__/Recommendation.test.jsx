@@ -4,8 +4,15 @@ import { MemoryRouter } from 'react-router-dom'
 import Recommendation from '../components/Recommendation/Recommendation'
 import questions from '../constants/questions'
 
+const mockNavigate = vi.fn()
+vi.mock('react-router-dom', async (importOriginal) => {
+  const actual = await importOriginal()
+  return { ...actual, useNavigate: () => mockNavigate }
+})
+
 beforeEach(() => {
   localStorage.clear()
+  mockNavigate.mockClear()
 })
 
 const renderWithRouter = () => render(
@@ -70,6 +77,9 @@ vi.mock('../utils/convertToSpecs', () => ({
         image: 'https://example.com/2.jpg',
         link: 'https://example.com/2',
       },
+      { id: 'test-3', name: 'Test Laptop 3', use: 'X', specs: 'i5', gpu: 'Iris Xe', price: '$11,000 MXN', portability: 'Media', image: '', link: '' },
+      { id: 'test-4', name: 'Test Laptop 4', use: 'X', specs: 'i5', gpu: 'Iris Xe', price: '$12,000 MXN', portability: 'Media', image: '', link: '' },
+      { id: 'generic-1', name: 'Clase genérica', isGeneric: true, use: 'X', specs: 'i5', gpu: 'Iris Xe', price: 'Consultar precio', portability: 'Media', image: '', link: '' },
     ],
   })),
 }))
@@ -168,5 +178,14 @@ describe('Recommendation — Technical level (INF-01)', () => {
     expect(screen.queryByText('Test rationale')).not.toBeInTheDocument()
     expect(screen.getByText(/advertencia crítica de prueba/i)).toBeInTheDocument()
     expect(screen.queryByText(/nota informativa de prueba/i)).not.toBeInTheDocument()
+  })
+})
+
+describe('Recommendation — compare deep-link', () => {
+  it('caps the compare deep-link at 3 non-generic models and excludes generics', () => {
+    renderWithRouter()
+    completeQuiz()
+    fireEvent.click(screen.getByRole('button', { name: /comparar/i }))
+    expect(mockNavigate).toHaveBeenCalledWith('/compare?models=test-1,test-2,test-3')
   })
 })

@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import Landing from '../pages/Landing/Landing'
-import { addEntry } from '../utils/historyStore'
+import { addEntry, getHistory } from '../utils/historyStore'
 
 beforeEach(() => {
   localStorage.clear()
@@ -31,7 +31,9 @@ describe('Landing — recent history (F-02)', () => {
     renderLanding()
     expect(screen.getByText(/tus consultas recientes/i)).toBeInTheDocument()
     expect(screen.getByText(/intel i7/i)).toBeInTheDocument()
-    expect(screen.getByText(/presupuesto/i)).toBeInTheDocument()
+    expect(screen.getByText(/16 GB/)).toBeInTheDocument()
+    expect(screen.getByText(/RTX 4050/)).toBeInTheDocument()
+    expect(screen.getByText(/\$12,000/)).toBeInTheDocument()
   })
 
   it('links each history card back to the quiz with its encoded plan', () => {
@@ -52,5 +54,6 @@ describe('Landing — recent history (F-02)', () => {
     renderLanding()
     fireEvent.click(screen.getByRole('button', { name: /limpiar/i }))
     expect(screen.queryByText(/tus consultas recientes/i)).not.toBeInTheDocument()
+    expect(getHistory()).toHaveLength(0)
   })
 })

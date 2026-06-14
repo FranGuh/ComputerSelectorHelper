@@ -65,11 +65,6 @@ function Recommendation() {
         if (result) window.scrollTo({ top: 0, behavior: 'smooth' })
     }, [result])
 
-    // INF-01: technical users get the rationale expanded by default
-    useEffect(() => {
-        if (result) setShowRationale(!!result.flags?.isTechnical)
-    }, [result])
-
     // FEATURE: read shared plan from ?plan= URL param on mount
     useEffect(() => {
         const params = new URLSearchParams(window.location.search)
@@ -77,8 +72,10 @@ function Recommendation() {
         if (plan) {
             const decoded = decodeAnswers(plan)
             if (decoded) {
+                const decodedSpecs = convertToSpecs(decoded)
                 setAnswers(decoded)
-                setResult(convertToSpecs(decoded))
+                setResult(decodedSpecs)
+                setShowRationale(!!decodedSpecs.flags?.isTechnical)
                 setIsSharedView(true)
             }
         }
@@ -128,6 +125,9 @@ function Recommendation() {
         } else {
             const specs = convertToSpecs(answers)
             setResult(specs)
+            // INF-01: technical users get the rationale expanded by default
+            // (set once when the result is created so manual toggles persist)
+            setShowRationale(!!specs.flags?.isTechnical)
             // F-02: persist this completed quiz to the Landing history
             addEntry({
                 encodedAnswers: encodeAnswers(answers),
@@ -199,7 +199,7 @@ function Recommendation() {
                     <meta property="og:description" content={`Te recomendamos: ${result.processor}, ${result.ram} RAM, ${result.gpu}.`} />
                 </Helmet>
 
-                <h1 className="sr-only">Tu recomendación de laptop</h1>
+                <h1 className="ResultTitle">Tu recomendación de laptop</h1>
 
                 {/* FEATURE: banner shown when viewing a shared link */}
                 {isSharedView && (
@@ -215,7 +215,7 @@ function Recommendation() {
                     <div className="InfoCard">
                         <div className="InfoCardHeader">
                             <FaCheckCircle className="InfoIcon" />
-                            <h4 className="InfoLabel">Usos seleccionados</h4>
+                            <h2 className="InfoLabel">Usos seleccionados</h2>
                         </div>
                         <p>
                             {answers.mainUse === 'full_use'
@@ -231,7 +231,7 @@ function Recommendation() {
                     <div className="InfoCard2">
                         <div className="InfoCardHeader">
                             <FaClipboardList className="InfoIcon" />
-                            <h4 className="InfoLabel">Tus respuestas</h4>
+                            <h2 className="InfoLabel">Tus respuestas</h2>
                         </div>
                         <div className="InfoTable">
                             {questions.map((q, index) => {
@@ -266,50 +266,50 @@ function Recommendation() {
                     </div>
                 </div>
 
-                <h4>Especificaciones Recomendadas</h4>
+                <h2>Especificaciones Recomendadas</h2>
                 <div className="SpecGrid">
                     <div className="SpecCard">
                         <FaMicrochip className="SpecIcon" />
-                        <h5 className="SpecLabel">Procesador</h5>
+                        <h3 className="SpecLabel">Procesador</h3>
                         <p className="SpecTitle">{result.processor}</p>
                     </div>
                     <div className="SpecCard">
                         <FaLaptop className="SpecIcon" />
-                        <h5 className="SpecLabel">Gráficos</h5>
+                        <h3 className="SpecLabel">Gráficos</h3>
                         <p className="SpecTitle">{result.gpu}</p>
                     </div>
                     <div className="SpecCard">
                         <FaMemory className="SpecIcon" />
-                        <h5 className="SpecLabel">RAM</h5>
+                        <h3 className="SpecLabel">RAM</h3>
                         <p className="SpecTitle">{result.ram}</p>
                     </div>
                     <div className="SpecCard">
                         <FaHdd className="SpecIcon" />
-                        <h5 className="SpecLabel">Almacenamiento</h5>
+                        <h3 className="SpecLabel">Almacenamiento</h3>
                         <p className="SpecTitle">{result.storage}</p>
                     </div>
                 </div>
 
-                <h4>Especificaciones Extra</h4>
+                <h2>Especificaciones Extra</h2>
                 <div className="SpecGrid">
                     <div className="SpecCard">
                         <FaRegHandPointer className="SpecIcon" />
-                        <h5 className="SpecLabel">Pantalla táctil</h5>
+                        <h3 className="SpecLabel">Pantalla táctil</h3>
                         <p className="SpecTitle">{result.touchscreen ? 'Sí' : 'No'}</p>
                     </div>
                     <div className="SpecCard">
                         <FaSuitcase className="SpecIcon" />
-                        <h5 className="SpecLabel">Portabilidad</h5>
+                        <h3 className="SpecLabel">Portabilidad</h3>
                         <p className="SpecTitle">{result.portability}</p>
                     </div>
                     <div className="SpecCard">
                         <FaWindows className="SpecIcon" />
-                        <h5 className="SpecLabel">Sistema operativo</h5>
+                        <h3 className="SpecLabel">Sistema operativo</h3>
                         <p className="SpecTitle">{result.os}</p>
                     </div>
                     <div className="SpecCard">
                         <FaBatteryFull className="SpecIcon" />
-                        <h5 className="SpecLabel">Batería</h5>
+                        <h3 className="SpecLabel">Batería</h3>
                         <p className="SpecTitle">{result.battery}</p>
                     </div>
                 </div>
@@ -356,12 +356,12 @@ function Recommendation() {
                   <div className="FallbackOptions">
                     <div className="FallbackHeader">
                       <FaExclamationTriangle className="FallbackIcon" />
-                      <h4>No encontramos matches exactos para tus necesidades</h4>
+                      <h2>No encontramos matches exactos para tus necesidades</h2>
                     </div>
 
                     <div className="FallbackChoice">
                       <div className="FallbackCard">
-                        <h5>Usá las specs como guía de compra</h5>
+                        <h3>Usá las specs como guía de compra</h3>
                         <p>Revisá las especificaciones recomendadas de arriba y usalas como referencia al buscar en tiendas.</p>
                         <a
                           href={`https://www.google.com/search?q=${encodeURIComponent(`laptop ${result.processor} ${result.ram} RAM ${result.gpu} ${result.storage}`)}`}
@@ -374,7 +374,7 @@ function Recommendation() {
                       </div>
 
                       <div className="FallbackCard">
-                        <h5>Ver equipos aproximados</h5>
+                        <h3>Ver equipos aproximados</h3>
                         <p>Estos modelos se acercan a lo que necesitás, aunque no cumplen todos los requisitos.</p>
                         <button onClick={() => setShowApproximate(!showApproximate)} className="FallbackButton FallbackButtonSecondary">
                           {showApproximate ? 'Ocultar modelos' : 'Ver modelos aproximados'}
@@ -384,7 +384,7 @@ function Recommendation() {
 
                     {showApproximate && (
                       <div className="ApproximateSection">
-                        <h5>Modelos aproximados (pueden no cumplir todos tus requisitos)</h5>
+                        <h3>Modelos aproximados (pueden no cumplir todos tus requisitos)</h3>
                         <div className="SuggestedModelsGrid">
                           {result.approximateClass.map((model, index) => (
                             <div key={model.id || index} className="LaptopCardWrapper Approximate">
@@ -401,7 +401,7 @@ function Recommendation() {
                 {(!result.laptopClass || result.laptopClass.length === 0) && (!result.approximateClass || result.approximateClass.length === 0) && (
                   <div className="NoResults">
                     <FaExclamationTriangle className="NoResultsIcon" />
-                    <h4>Por el momento no se encuentra un equipo con las especificaciones recomendadas</h4>
+                    <h2>Por el momento no se encuentra un equipo con las especificaciones recomendadas</h2>
                     <p>Usá las especificaciones de arriba como guía al buscar en tiendas.</p>
                     <a
                       href={`https://www.google.com/search?q=${encodeURIComponent(`laptop ${result.processor} ${result.ram} RAM ${result.gpu} ${result.storage}`)}`}
@@ -416,7 +416,7 @@ function Recommendation() {
 
                 {result.laptopClass && Array.isArray(result.laptopClass) && (
                     <>
-                        <h4>Modelos sugeridos (referencia):</h4>
+                        <h2>Modelos sugeridos (referencia):</h2>
                         <div className="SuggestedModelsGrid">
                             {result.laptopClass.map((model, index) => (
                                 <LaptopCard key={model.id || index} model={model} />
@@ -440,7 +440,7 @@ function Recommendation() {
 
                 <div className="FinalActionsGrid">
                     <div className="ActionCard">
-                        <h5>Compartir recomendación</h5>
+                        <h2>Compartir recomendación</h2>
                         <p>Guardá este link o envialo a alguien.</p>
                         <div className="ActionCard__buttons">
                             <button
@@ -467,7 +467,7 @@ function Recommendation() {
                     </div>
                     
                     <div className="ActionCard">
-                        <h5>Volver a empezar</h5>
+                        <h2>Volver a empezar</h2>
                         <p>Probá otra combinación de respuestas.</p>
                         <div className="ActionCard__buttons">
                             <button onClick={handleReset} className="ActionBtn RestartBtn">

@@ -208,6 +208,13 @@
   color: var(--text-dark);
 }
 
+.ResultTitle {
+  font-size: var(--font-size-3xl, 1.875rem);
+  text-align: center;
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-xl, 2rem);
+}
+
 .ResultIntro {
   text-align: left;
 }
@@ -525,7 +532,7 @@
   box-shadow: var(--shadow-sm, 0 1px 2px 0 rgb(0 0 0 / 0.05));
 }
 
-.ActionCard h5 {
+.ActionCard h2 {
   font-size: var(--font-size-lg, 1.125rem);
   margin: 0 0 var(--spacing-xs, 0.25rem);
   color: var(--text-dark);
@@ -645,7 +652,7 @@
   text-align: center;
 }
 .NoResultsIcon { font-size: 40px; color: #f59e0b; }
-.NoResults h4 { color: #92400e; margin: 0; font-size: var(--font-size-lg); }
+.NoResults h2 { color: #92400e; margin: 0; font-size: var(--font-size-lg); }
 .NoResults p { color: #78350f; max-width: 500px; }
 .NoResultsButton {
   display: inline-flex;
@@ -679,7 +686,7 @@
   margin-bottom: var(--spacing-lg);
 }
 .FallbackIcon { font-size: 24px; color: var(--color-warning); }
-.FallbackHeader h4 { margin: 0; color: var(--color-text); }
+.FallbackHeader h2 { margin: 0; color: var(--color-text); font-size: var(--font-size-xl); }
 .FallbackChoice {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -692,7 +699,7 @@
   border: 1px solid var(--color-border);
   text-align: center;
 }
-.FallbackCard h5 { margin: 0 0 var(--spacing-sm); font-size: var(--font-size-lg); }
+.FallbackCard h3 { margin: 0 0 var(--spacing-sm); font-size: var(--font-size-lg); }
 .FallbackCard p { color: var(--color-text-muted); font-size: var(--font-size-sm); margin-bottom: var(--spacing-md); }
 /* BUG-04 FIX: merged two split .FallbackButton blocks into one */
 .FallbackButton {
@@ -729,7 +736,7 @@
   padding-top: var(--spacing-lg);
   border-top: 1px solid var(--color-border);
 }
-.ApproximateSection h5 {
+.ApproximateSection h3 {
   text-align: center;
   color: var(--color-text-muted);
   margin-bottom: var(--spacing-lg);
@@ -840,7 +847,7 @@
 :root[data-theme='dark'] .NoResultsIcon {
   color: #fbbf24;
 }
-:root[data-theme='dark'] .NoResults h4 {
+:root[data-theme='dark'] .NoResults h2 {
   color: #fcd34d;
 }
 :root[data-theme='dark'] .NoResults p {

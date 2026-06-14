@@ -548,7 +548,7 @@
 
 :root[data-theme='dark'] .CompareSelectedChip__remove {
   background: rgba(59, 130, 246, 0.35);
-  color: #bfdbfe;
+  color: var(--color-text);
 }
 :root[data-theme='dark'] .CompareSelectedChip__remove:hover {
   background: rgba(59, 130, 246, 0.5);
