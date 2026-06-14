@@ -43,7 +43,7 @@
   transform: translateX(-2px);
 }
 
-.CompareHeader h2 {
+.CompareHeader h1 {
   font-size: var(--font-size-2xl, 1.5rem);
   color: var(--color-text, #1e293b);
   margin: 0 0 var(--spacing-xs) 0;

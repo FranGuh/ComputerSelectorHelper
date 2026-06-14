@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter, NavLink } from 'react-router-dom'
+import { BrowserRouter, NavLink, Link } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import AppRoutes from './routes/AppRoutes'
 import { Analytics } from "@vercel/analytics/react"
@@ -11,7 +11,9 @@ function App() {
       <BrowserRouter>
         <header className="AppHeader">
           <div className="AppHeader__brand">
-            <h1>Computer Selector <span className='title__alter'>Helper</span></h1>
+            <Link to="/" className="AppHeader__brandLink" aria-label="Computer Selector Helper — Inicio">
+              Computer Selector <span className='title__alter'>Helper</span>
+            </Link>
           </div>
           <nav className="AppNav" aria-label="Navegación principal">
             <NavLink to="/" end className={({ isActive }) => isActive ? 'AppNav__link active' : 'AppNav__link'}>Inicio</NavLink>

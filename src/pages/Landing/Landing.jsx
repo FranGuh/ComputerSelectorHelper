@@ -19,10 +19,10 @@ const Landing = () => {
         <section className="LandingHero">
           <div className="LandingHero__content">
             <div className="Badge">Asistente Inteligente</div>
-            <h2 className="LandingHero__title">
+            <h1 className="LandingHero__title">
               No compres por marca. <br />
               <span className="text-gradient">Elegí por rendimiento.</span>
-            </h2>
+            </h1>
             <p className="LandingHero__subtitle">
               Respondé unas preguntas simples y nuestro algoritmo te recomendará exactamente la laptop que necesitás. Sin tecnicismos ni gastar de más.
             </p>
@@ -46,7 +46,8 @@ const Landing = () => {
         </section>
 
         {/* Features Grid */}
-        <section className="LandingFeatures">
+        <section className="LandingFeatures" aria-labelledby="landing-features-title">
+          <h2 id="landing-features-title" className="sr-only">Por qué elegir Computer Selector Helper</h2>
           <div className="FeatureCard">
             <div className="FeatureCard__icon"><FaMicrochip /></div>
             <h3>Análisis Técnico</h3>

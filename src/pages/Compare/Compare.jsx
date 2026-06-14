@@ -170,7 +170,7 @@ function Compare() {
         <button className="CompareBackBtn" onClick={() => navigate(-1)} aria-label="Volver">
           <FaArrowLeft aria-hidden="true" /> <span className="CompareBackBtn__text">Volver</span>
         </button>
-        <h2>Comparar laptops</h2>
+        <h1>Comparar laptops</h1>
         <p className="CompareSubtitle">
           Seleccioná hasta {MAX_COMPARE} laptops para comparar sus especificaciones
         </p>
@@ -313,7 +313,7 @@ function Compare() {
       {/* Comparison table — only when 2+ selected */}
       {selectedModels.length >= 2 && (
         <div className="CompareTableSection" ref={tableRef}>
-          <h3>Comparación de especificaciones</h3>
+          <h2>Comparación de especificaciones</h2>
           <div className="CompareTableWrapper">
             <table className="CompareTable" aria-label="Tabla comparativa de laptops">
               <thead>

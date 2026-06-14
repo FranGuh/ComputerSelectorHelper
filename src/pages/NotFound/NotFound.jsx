@@ -14,7 +14,7 @@ const NotFound = () => {
       </Helmet>
       <div className="NotFound">
         <FaLaptop className="NotFound__icon" aria-hidden="true" />
-        <h2>404 — Página no encontrada</h2>
+        <h1>404 — Página no encontrada</h1>
         <p>El link que seguiste no existe o fue movido.</p>
         <button className="NotFound__btn" onClick={() => navigate('/')}>
           Volver al inicio

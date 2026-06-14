@@ -178,6 +178,8 @@ function Recommendation() {
                     <meta property="og:description" content={`Te recomendamos: ${result.processor}, ${result.ram} RAM, ${result.gpu}.`} />
                 </Helmet>
 
+                <h1 className="sr-only">Tu recomendación de laptop</h1>
+
                 {/* FEATURE: banner shown when viewing a shared link */}
                 {isSharedView && (
                     <div className="SharedViewBanner" role="note">
@@ -460,6 +462,7 @@ function Recommendation() {
 
     return (
         <div className='Question'>
+                <h1 className="sr-only">Encontrá tu laptop ideal</h1>
                 <div className="QuizProgress">
                     <div className="QuizProgressBar" role="progressbar" aria-valuenow={step + 1} aria-valuemin={0} aria-valuemax={questions.length} aria-label={`Pregunta ${step + 1} de ${questions.length}`}>
                     <div className="QuizProgressFill" style={{ width: `${((step + 1) / questions.length) * 100}%` }} />
